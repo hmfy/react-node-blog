@@ -1,10 +1,13 @@
 import './App.css';
-
+import React from "react"
+import AppLayout from 'views/Layout'
 
 function App() {
-  return (
-    <div className="App">welcome to react!</div>
-  );
+	return (
+		<div className="app">
+			<AppLayout />
+		</div>
+	);
 }
 
 export default App;

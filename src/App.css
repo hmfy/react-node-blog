@@ -1,38 +1,90 @@
-.App {
-  text-align: center;
+/*
+ant 样式
+*/
+@import '~antd/dist/antd.css';
+
+/*
+全局样式
+*/
+body::-webkit-scrollbar {
+    display: none;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#app {
+
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#app::-webkit-scrollbar {
+    display: none
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.ant-card-actions > li:not(:last-child) {
+    border-color: transparent;
 }
 
-.App-link {
-  color: #61dafb;
+/* 布局样式 */
+.ant-layout {
+    background-color: white;
+    padding-bottom: 50px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ant-layout-header {
+    position: sticky;
+    top: 0;
+    z-index: 999999;
+    background-color: white;
+    height: auto;
+    padding: 0;
+    border-bottom: 10px solid white;
 }
+
+.ant-layout-content {
+
+}
+
+.ant-layout-sider {
+    background-color: white;
+    position: sticky;
+    top: 0;
+}
+
+.ant-layout-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    padding: 0;
+}
+
+.ant-layout-footer .ant-card-body {
+    padding: 0;
+}
+
+.ant-layout-footer .bei {
+    margin: 0 auto;
+    padding: 10px 0;
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ant-layout-footer .bei a {
+    color: #36a9d7;
+}
+
+.ant-layout-footer .bei img {
+    display: inline-block;
+    text-decoration: none;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: baseline;
+}
+
+.ant-layout-footer .bei p {
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 0 0 5px;
+}
+
