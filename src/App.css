@@ -6,8 +6,23 @@ ant 样式
 /*
 全局样式
 */
+
 body::-webkit-scrollbar {
     display: none;
+}
+
+.card-box-shadow {
+    border-color: transparent;
+    box-shadow: 0 1px 2px -2px rgba(0, 0, 0, .16), 0 3px 6px 0 rgba(0, 0, 0, .12), 0 5px 12px 4px rgba(0, 0, 0, .09);
+}
+
+.overflow-dot {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-indent: 2em;
 }
 
 #app {
