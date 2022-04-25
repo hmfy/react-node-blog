@@ -12,7 +12,7 @@ function NewestArticle () {
 
 	return (
 		<SelfList data={data} title='最近' style={{
-			marginBottom: "10px"
+			marginBottom: "16px"
 		}} />
 	)
 }

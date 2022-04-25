@@ -11,7 +11,7 @@ function HotArticle () {
 	];
 
 	return (
-		<SelfList data={data} title='热度' />
+		<SelfList data={data} title='热门' />
 	)
 }
 export default HotArticle

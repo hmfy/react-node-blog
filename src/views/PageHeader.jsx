@@ -1,25 +1,22 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Input } from 'antd'
+import {Col, Row, Input} from 'antd'
 
 const wrapperStyle = {
 	height: '50px',
-	lineHeight: '50px',
-	borderBottom: "2px solid #e7e6e6"
+	lineHeight: '50px'
 }
 
 const menuStyle = {
-	width: '40vw',
-	margin: '0 auto',
 	display: 'flex',
-	justifyContent: "end"
+	justifyContent: "space-between"
 }
 
 const menuItemStyle = {
-	marginLeft: '35px',
+	marginLeft: '25px',
 	cursor: 'pointer',
-	fontSize: "16px",
-	color: '#b1b1b1'
+	fontSize: "14px",
+	color: '#868686'
 }
 
 function MenuItem({ item }) {
@@ -33,11 +30,10 @@ function MenuItem({ item }) {
 	const curRouter = path === pathname
 	const controlHover = val => () => setHover(val || curRouter)
 	const chooseItem = () => hover && curRouter
-	const chooseTheme = 'black'
+	const chooseTheme = 'white'
 	const curMenuItemStyle = chooseItem() ? (
 		{
-			color: 'black',
-			fontWeight: 'bold'
+			color: chooseTheme
 		}
 	) : {}
 
@@ -45,7 +41,7 @@ function MenuItem({ item }) {
 		<div onMouseEnter={controlHover(true)} onMouseLeave={controlHover(false)}
 			 style={{...menuItemStyle, ...curMenuItemStyle }} onClick={goto(path)}>
 			<span style={{
-				borderBottom: `2px solid ${chooseTheme}`,
+				borderBottom: `1px solid ${chooseTheme}`,
 				borderBottomColor: chooseItem() ? chooseTheme : 'transparent'
 			}}>
 				{name}
@@ -56,9 +52,18 @@ function MenuItem({ item }) {
 
 function MenuList({menuList = []}) {
 	return (
-		menuList.map(
-			(item, index) => <MenuItem key={index} item={item}/>
-		)
+		<div style={{
+			flexBasis: "500px",
+			flexGrow: 1,
+			display: "flex",
+			justifyContent: "end"
+		}}>
+			{
+				menuList.map(
+					(item, index) => <MenuItem key={index} item={item}/>
+				)
+			}
+		</div>
 	)
 }
 
@@ -67,21 +72,28 @@ function PageHeader() {
 		{name: '主页', path: '/'},
 		{name: '目录', path: '/article'},
 		{name: '随笔', path: '/sticky'},
-		{name: '时间线', path: '/time'}
+		{name: '日历', path: '/time'}
 	])
 
 	return (
 		<div style={wrapperStyle}>
-			<div style={menuStyle}>
-				<Input placeholder="search your keywords" style={{
-					width: 300,
-					height: '30px',
-					transform: 'translateY(10px)',
-					borderBottom: '1px solid #cccccc',
-					borderRadius: '0'
-				}}  string='' bordered={false} />
-				<MenuList menuList={menuList}/>
-			</div>
+			<Row>
+				<Col xs={{ span: 1 }} lg={{ span: 3 }} xxl={{ span: 6 }} />
+				<Col xs={{ span: 22 }} lg={{ span: 18 }} xxl={{ span: 12 }}>
+					<div style={menuStyle}>
+						<Input placeholder="search your keywords" style={{
+							color: "#ccc",
+							width: 300,
+							height: '30px',
+							transform: 'translateY(10px)',
+							borderBottom: '1px solid #ccc',
+							borderRadius: '0'
+						}}  string='' bordered={false} />
+						<MenuList menuList={menuList}/>
+					</div>
+				</Col>
+				<Col xs={{ span: 1 }} lg={{ span: 3 }} xxl={{ span: 6 }} />
+			</Row>
 		</div>
 	)
 }

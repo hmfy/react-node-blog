@@ -2,21 +2,29 @@ import React from "react";
 import BlogList from "./BlogList";
 import NewestArticle from "./NewestArticle";
 import HotArticle from "./HotArticle";
-import { Layout } from "antd";
+import { Layout, Col, Row } from "antd";
 
 function Home () {
 	const { Sider } = Layout
 
 	return (
 		<Layout style={{
-			paddingTop: "10px",
-			width: "50vw"
+			paddingTop: "10px"
 		}}>
-			<BlogList />
-			<Sider>
-				<NewestArticle />
-				<HotArticle />
-			</Sider>
+			<Row gutter={ 16 } style={{
+				width: "100%"
+			}}>
+				<Col xs={{ span: 0 }} lg={{ span: 2 }} xxl={{ span: 5 }} />
+				<Col xs={{ span: 22, offset: 1 }} lg={{ span: 12, offset: -2 }} xxl={{ span: 12 }} >
+					<BlogList />
+				</Col>
+				<Col xs={{ span: 0 }} lg={{ span: 6 }} xxl={{ span: 5 }} >
+					<Sider>
+						<NewestArticle />
+						<HotArticle />
+					</Sider>
+				</Col>
+			</Row>
 		</Layout>
 	)
 }

@@ -4,7 +4,11 @@ import AppLayout from 'views/Layout'
 
 function App() {
 	return (
-		<div className="app">
+		<div className="app" style={{
+			height: "100vh",
+			overflowX: "hidden",
+			overflowY: "scroll",
+		}}>
 			<AppLayout />
 		</div>
 	);

@@ -1,11 +1,13 @@
+import { baseUrl } from 'tools/req'
 import React, { useState } from "react";
 import {Slider, Upload, message} from 'antd';
 import {InboxOutlined, DownloadOutlined} from '@ant-design/icons';
 const {Dragger} = Upload;
-
 function formatter(value) {
 	return `让图片不超过${value}kb`;
 }
+
+console.log(process.env.NODE_ENV)
 
 function ImgZip() {
 	const [ compress, setCompress ] = useState(300)
@@ -13,13 +15,13 @@ function ImgZip() {
 	const props = {
 		name: 'photos',
 		multiple: true,
-		action: 'https://127.0.0.1:3000/file/zip',
+		action: `${baseUrl}/file/zip`,
 		data: {
 			compressVal: compress * 1024, // kb
 		},
 		async onDownload ({ name }) {
 			let a = document.createElement("a")
-			a.href = `https://127.0.0.1:3000/file/download?path=${name}&type=zip`
+			a.href = `${baseUrl}/file/download?path=${name}&type=zip`
 			a.target = 'blank'
 			a.click()
 		},
