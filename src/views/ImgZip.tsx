@@ -1,14 +1,17 @@
-import { baseUrl } from 'tools/req'
-import React, { useState } from "react";
+import React, {useState} from "react";
+import { baseUrl } from 'tools/tools'
 import {Slider, Upload, message} from 'antd';
 import {InboxOutlined, DownloadOutlined} from '@ant-design/icons';
+import {RcFile, UploadChangeParam} from "antd/es/upload";
+import {UploadFile} from "antd/es/upload/interface";
 const {Dragger} = Upload;
-function formatter(value) {
+
+interface FileInfo extends RcFile {
+	status?: 'uploading' | 'done' | 'error',
+}
+function formatter(value?: number | undefined) {
 	return `让图片不超过${value}kb`;
 }
-
-console.log(process.env.NODE_ENV)
-
 function ImgZip() {
 	const [ compress, setCompress ] = useState(300)
 
@@ -19,7 +22,7 @@ function ImgZip() {
 		data: {
 			compressVal: compress * 1024, // kb
 		},
-		async onDownload ({ name }) {
+		async onDownload ({ name }:UploadFile) {
 			let a = document.createElement("a")
 			a.href = `${baseUrl}/file/download?path=${name}&type=zip`
 			a.target = 'blank'
@@ -30,7 +33,7 @@ function ImgZip() {
 			downloadIcon: <DownloadOutlined/>,
 			showRemoveIcon: true,
 		},
-		beforeUpload: ({ type, size, name }) => {
+		beforeUpload: ({type, size, name}:FileInfo) => {
 			const isPNG = type.includes('image');
 			const needZip = size > compress * 1024
 			if (!isPNG) {
@@ -41,7 +44,7 @@ function ImgZip() {
 			}
 			return (isPNG && needZip) || Upload.LIST_IGNORE
 		},
-		onChange(info) {
+		onChange(info: UploadChangeParam) {
 			const {status} = info.file;
 			if (status !== 'uploading') {
 				console.log(info.file, info.fileList);
@@ -51,11 +54,7 @@ function ImgZip() {
 			} else if (status === 'error') {
 				message.error(`${info.file.name} file upload failed.`).then(r => r);
 			}
-		},
-		onDrop(e) {
-			debugger;
-			console.log('Dropped files', e.dataTransfer.files);
-		},
+		}
 	}
 
 	return (

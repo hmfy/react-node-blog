@@ -19,16 +19,24 @@ const menuItemStyle = {
 	color: '#868686'
 }
 
-function MenuItem({ item }) {
+type Item = {
+	name: string
+	path: string
+}
+
+type ItemProps = {
+	item: Item
+}
+function MenuItem({ item }:ItemProps) {
 	const { name, path } = item
 	const [hover, setHover] = useState(true)
 	const navigate = useNavigate()
 	const { pathname } = useLocation()
-	const goto = path => () => {
+	const goto = (path:string) => () => {
 		navigate(path)
 	}
 	const curRouter = path === pathname
-	const controlHover = val => () => setHover(val || curRouter)
+	const controlHover = (val:boolean) => () => setHover(val || curRouter)
 	const chooseItem = () => hover && curRouter
 	const chooseTheme = 'white'
 	const curMenuItemStyle = chooseItem() ? (
@@ -50,7 +58,9 @@ function MenuItem({ item }) {
 	)
 }
 
-function MenuList({menuList = []}) {
+function MenuList({menuList = []}:{
+	menuList: Array<Item>
+}) {
 	return (
 		<div style={{
 			flexBasis: "500px",
@@ -70,9 +80,9 @@ function MenuList({menuList = []}) {
 function PageHeader() {
 	const [menuList] = useState([
 		{name: '主页', path: '/'},
+		{name: '日志', path: '/time'},
+		{name: '留言', path: '/sticky'},
 		{name: '目录', path: '/article'},
-		{name: '随笔', path: '/sticky'},
-		{name: '日历', path: '/time'}
 	])
 
 	return (
@@ -88,7 +98,7 @@ function PageHeader() {
 							transform: 'translateY(10px)',
 							borderBottom: '1px solid #ccc',
 							borderRadius: '0'
-						}}  string='' bordered={false} />
+						}}  bordered={false} />
 						<MenuList menuList={menuList}/>
 					</div>
 				</Col>

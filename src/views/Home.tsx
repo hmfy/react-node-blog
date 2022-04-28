@@ -1,6 +1,6 @@
 import React from "react";
 import BlogList from "./BlogList";
-import NewestArticle from "./NewestArticle";
+import NewArticle from "./NewArticle";
 import HotArticle from "./HotArticle";
 import { Layout, Col, Row } from "antd";
 
@@ -20,7 +20,7 @@ function Home () {
 				</Col>
 				<Col xs={{ span: 0 }} lg={{ span: 6 }} xxl={{ span: 5 }} >
 					<Sider>
-						<NewestArticle />
+						<NewArticle />
 						<HotArticle />
 					</Sider>
 				</Col>

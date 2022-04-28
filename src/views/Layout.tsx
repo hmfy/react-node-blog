@@ -1,3 +1,4 @@
+import { getDisplay } from "tools/tools"
 import React from "react";
 import { Layout } from "antd";
 import PageFooter from "views/PageFooter";
@@ -17,7 +18,7 @@ function AppLayout () {
 	return (
 		<Layout>
 			<Header style={{
-				display: pathname === '/zip' && "none",
+				display: getDisplay(pathname !== '/zip'),
 				// backgroundColor: "black",
 				color: "white"
 			}}>
@@ -25,7 +26,7 @@ function AppLayout () {
 				<div style={{
 					height: 150,
 					position: "relative",
-					display: window.navigator.userAgent.includes('Mobile') && 'none',
+					display: getDisplay(!window.navigator.userAgent.includes('Mobile')),
 				}}>
 					<img src={'https://fyang.fun/files/ocean.jpg'} style={{
 						width: '100%',
