@@ -1,63 +1,56 @@
-import React, {CSSProperties} from "react";
+import React, {CSSProperties, useState} from "react";
 import {List} from "antd"
 import FLoading from "comps/FLoading";
-import FEmpty from "comps/FEmpty";
 import useRequest from "hooks/useRequest";
+import {useNavigate} from "react-router-dom";
 
-type BlogProps = {
-    id: number
-    title?: string,
-    content: string,
-    createTime: string
-}
-type Response = {
-    data: {
-        list: Array<BlogProps>
-    }
-}
+export type ListItem = { title: string, content: string, id: number }
 
-type listParams = {
-    request: () => Promise<Response>
-    title: string
+export type List = Array<ListItem>
+
+export type ListParams = {
+    url: string
     style?: CSSProperties
+    title: string
 }
 
-function ListItem({content}:{ content?: string }) {
-    return (<List.Item style={{
+function ListItem({content, id}: ListItem) {
+    const navigate = useNavigate()
+    const itemStyle: CSSProperties = {
         whiteSpace: "nowrap",
         textOverflow: "ellipsis",
         overflow: "hidden",
         display: "block",
         cursor: "pointer",
+    }
+    return (<List.Item style={itemStyle} onClick={() => {
+        navigate('/detail', { state: { articleID: id }, replace: false })
     }}>
         {content}
     </List.Item>)
 }
 
-function FList({request, title, style}: listParams) {
-    const {empty, loading, dataList} = useRequest(request)
+const Header = ({title}: { title: string }) => {
+    const sty: CSSProperties = {fontSize: "16px", fontWeight: "bold"}
+    return (<div style={sty}>{title}</div>)
+}
+
+function FList({url, title, style}: ListParams) {
+    const [ params ] = useState({ url: url })
+    let {loading, resData} = useRequest(params)
+    const list: List = resData.list
+    const wrapperStyle: CSSProperties = {position: "relative", minHeight: "200px"}
     return (
-        <div style={{
-            position: "relative",
-            minHeight: "200px"
-        }}>
+        <div style={wrapperStyle}>
             <FLoading show={loading}/>
-            {
-                <List
-                    className={"card-box-shadow"}
-                    style={style}
-                    header={
-                        <div style={{
-                            fontSize: "16px",
-                            fontWeight: "bold"
-                        }}>{title}</div>
-                    }
-                    bordered
-                    dataSource={dataList}
-                    renderItem={item => <ListItem {...item} />}
-                />
-            }
-            {/*<FEmpty show={empty}/>*/}
+            <List
+                className={"card-box-shadow"}
+                style={style}
+                header={<Header title={title}/>}
+                bordered
+                dataSource={list}
+                renderItem={item => <ListItem {...item} />}
+            />
         </div>
     )
 }

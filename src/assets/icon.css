@@ -1,0 +1,42 @@
+@font-face {
+    font-family: "remixicon";
+    src: url("./font/remixicon.woff2?t=1651748269399") format("woff2"),
+    url('./font/remixicon.ttf?t=1651748269399') format('truetype');
+    font-display: swap;
+}
+
+[class^="ri-"], [class*="ri-"] {
+    font-family: 'remixicon', monospace !important;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.ri-bold:before { content: "\ead1"; }
+.ri-italic:before { content: "\ee6b"; }
+.ri-font-size:before { content: "\ed8d"; }
+.ri-font-color:before { content: "\ed8b"; }
+.ri-underline:before { content: "\f244"; }
+.ri-strike:before { content: "\f1ab"; }
+.ri-list-unordered:before { content: "\eebe"; }
+.ri-list-ordered:before { content: "\eebb"; }
+.ri-h-1:before { content: "\ede6"; }
+.ri-h-2:before { content: "\ede7"; }
+.ri-h-3:before { content: "\ede8"; }
+.ri-blockquote:before { content: "\ec51"; }
+.ri-horizontal:before { content: "\f0de"; }
+.ri-link:before { content: "\eeaf"; }
+.ri-align-left:before { content: "\ea27"; }
+.ri-align-center:before { content: "\ea25"; }
+.ri-align-right:before { content: "\ea28"; }
+.ri-indent:before { content: "\ee55"; }
+.ri-page-break:before { content: "\efbd"; }
+.ri-undo:before { content: "\ea58"; }
+.ri-redo:before { content: "\ea5a"; }
+.ri-image:before { content: "\ee47"; }
+.ri-left-rotate:before { content: "\ea3a"; }
+.ri-right-rotate:before { content: "\eb95"; }
+.ri-code:before { content: "\ebac"; }
+.ri-upload:before { content: "\ed15"; }
+.ri-paste:before { content: "\eaf6"; }
+.ri-copy:before { content: "\f0d6"; }

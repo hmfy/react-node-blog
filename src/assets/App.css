@@ -1,14 +1,11 @@
 /*
-ant 样式
-*/
-@import '~antd/dist/antd.css';
-
-/*
 全局样式
 */
 
-body::-webkit-scrollbar {
-    display: none;
+#root {
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .card-box-shadow {
@@ -29,16 +26,22 @@ body::-webkit-scrollbar {
     text-indent: 2em;
 }
 
-#app {
-
-}
-
-#app::-webkit-scrollbar {
+::-webkit-scrollbar {
     display: none
 }
 
 .ant-card-actions > li:not(:last-child) {
     border-color: transparent;
+}
+
+.hover-blue:hover {
+    color: #40a9ff !important;
+    cursor: pointer;
+}
+
+.hover-black:hover {
+    color: black;
+    cursor: pointer;
 }
 
 /* 布局样式 */
@@ -52,8 +55,10 @@ body::-webkit-scrollbar {
     z-index: 999999;
     height: auto;
     padding: 0;
-    border-bottom: 10px solid white;
-    background-color: black;
+    /*border-bottom: 10px solid white;
+    background-color: black;*/
+    background-color: white;
+    box-shadow: 1px 1px 1px #e6e5e4;
 }
 
 .ant-layout-content {
@@ -77,6 +82,7 @@ body::-webkit-scrollbar {
     padding: 0;
     background-color: black;
     color: white;
+    z-index: 999999;
 }
 
 .ant-layout-footer .ant-card-body {

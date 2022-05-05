@@ -1,23 +1,6 @@
-import React, { useState } from 'react'
+import React, {CSSProperties, useState} from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {Col, Row, Input} from 'antd'
-
-const wrapperStyle = {
-	height: '50px',
-	lineHeight: '50px'
-}
-
-const menuStyle = {
-	display: 'flex',
-	justifyContent: "space-between"
-}
-
-const menuItemStyle = {
-	marginLeft: '25px',
-	cursor: 'pointer',
-	fontSize: "14px",
-	color: '#868686'
-}
 
 type Item = {
 	name: string
@@ -29,27 +12,31 @@ type ItemProps = {
 }
 function MenuItem({ item }:ItemProps) {
 	const { name, path } = item
-	const [hover, setHover] = useState(true)
 	const navigate = useNavigate()
 	const { pathname } = useLocation()
 	const goto = (path:string) => () => {
 		navigate(path)
 	}
-	const curRouter = path === pathname
-	const controlHover = (val:boolean) => () => setHover(val || curRouter)
-	const chooseItem = () => hover && curRouter
-	const chooseTheme = 'white'
-	const curMenuItemStyle = chooseItem() ? (
+	const chooseItem = () => path === pathname
+	const chooseTheme = 'black' // 选中菜单主题色
+	const curMenuItemStyle = chooseItem() ? ( // 被选中的菜单颜色
 		{
-			color: chooseTheme
+			color: chooseTheme,
+			fontWeight: "bold"
 		}
 	) : {}
+	const menuItemStyle = {
+		marginLeft: '25px',
+		cursor: 'pointer',
+		fontSize: "14px",
+		color: '#868686'
+	}
 
 	return (
-		<div onMouseEnter={controlHover(true)} onMouseLeave={controlHover(false)}
+		<div className={ 'hover-black' }
 			 style={{...menuItemStyle, ...curMenuItemStyle }} onClick={goto(path)}>
 			<span style={{
-				borderBottom: `1px solid ${chooseTheme}`,
+				borderBottom: `2px solid ${chooseTheme}`,
 				borderBottomColor: chooseItem() ? chooseTheme : 'transparent'
 			}}>
 				{name}
@@ -61,13 +48,15 @@ function MenuItem({ item }:ItemProps) {
 function MenuList({menuList = []}:{
 	menuList: Array<Item>
 }) {
+	const sty:CSSProperties = {
+		flexBasis: "500px",
+		flexGrow: 1,
+		display: "flex",
+		justifyContent: "end"
+	}
+
 	return (
-		<div style={{
-			flexBasis: "500px",
-			flexGrow: 1,
-			display: "flex",
-			justifyContent: "end"
-		}}>
+		<div style={ sty }>
 			{
 				menuList.map(
 					(item, index) => <MenuItem key={index} item={item}/>
@@ -77,13 +66,33 @@ function MenuList({menuList = []}:{
 	)
 }
 
-function PageHeader() {
+function Menu() {
 	const [menuList] = useState([
 		{name: '主页', path: '/'},
+		{name: '目录', path: '/list'},
+		// {name: '随笔', path: '/sticky'},
 		{name: '日志', path: '/time'},
-		{name: '留言', path: '/sticky'},
-		{name: '目录', path: '/article'},
+		{name: '留言', path: '/comment'},
+		{name: '写作', path: '/write'},
 	])
+
+	const menuStyle = {
+		display: 'flex',
+		justifyContent: "space-between"
+	}
+
+	const wrapperStyle = {
+		height: '50px',
+		lineHeight: '50px'
+	}
+
+	const inputStyle:CSSProperties = {
+		width: 300,
+		height: '30px',
+		transform: 'translateY(10px)',
+		borderBottom: '1px solid #ccc',
+		borderRadius: '0'
+	}
 
 	return (
 		<div style={wrapperStyle}>
@@ -91,14 +100,7 @@ function PageHeader() {
 				<Col xs={{ span: 1 }} lg={{ span: 3 }} xxl={{ span: 6 }} />
 				<Col xs={{ span: 22 }} lg={{ span: 18 }} xxl={{ span: 12 }}>
 					<div style={menuStyle}>
-						<Input placeholder="search your keywords" style={{
-							color: "#ccc",
-							width: 300,
-							height: '30px',
-							transform: 'translateY(10px)',
-							borderBottom: '1px solid #ccc',
-							borderRadius: '0'
-						}}  bordered={false} />
+						<Input placeholder="search your keywords" style={ inputStyle }  bordered={false} />
 						<MenuList menuList={menuList}/>
 					</div>
 				</Col>
@@ -108,4 +110,4 @@ function PageHeader() {
 	)
 }
 
-export default PageHeader
+export default Menu

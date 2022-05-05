@@ -1,39 +1,67 @@
 import {useEffect, useState} from "react"
+import {AxiosRequestHeaders} from "axios";
+import {instance} from "tools/tools"
 
-type ItemProps = {
-    content: string
-    createTime: string
-    id: number
-    title?: string
+export type ResData = {
+    list: []
+    pageQuery?: boolean,
+    pageSiz?: number,
+    pageNo?: number,
+    total?: number
 }
-type Response = {
-    data: {
-        list: Array<ItemProps>
-    }
+
+export type Response = {
+    data: ResData
 }
-function useRequest(req: () => Promise<Response>, initialState: Array<ItemProps> = []) {
-    const [dataList, setData] = useState(initialState)
+
+export type Params = {
+    url: string
+    data?: object
+    headers?: AxiosRequestHeaders
+    method?: 'GET' | 'POST'
+    timeout?: number
+}
+
+export default useRequest
+
+const mockUrl = 'https://www.fastmock.site/mock/5a9f84630f3ede0293cf99c7f56c0644/blog'
+const defaultAPI = '/execute'
+
+function request({ url, ...resetParams }:Params): Promise<Response> {
+    return instance.request({
+        baseURL: mockUrl,
+        url: url || defaultAPI,
+        method: 'POST',
+        ...resetParams
+    })
+}
+
+function useRequest(arg:Params): {
+    resData: ResData,
+    empty: boolean,
+    loading: boolean,
+    setEmpty: (b:boolean) => any,
+    setLoading: (b:boolean) => any
+}
+function useRequest(arg: Params) {
+    const [resData, setResData] = useState<ResData>({list: []})
     const [empty, setEmpty] = useState(false)
     const [loading, setLoading] = useState(true)
     useEffect(() => {
         async function fetchData() {
-            const {
-                data:{ list }
-            } = await req()
-            setData(list)
-            if (list.length === 0) {
-                setEmpty(true)
-            }
+            const { data } = await request(arg)
+            setResData(data)
+            if (!data.list.length) setEmpty(true)
             setLoading(false)
         }
 
         fetchData().then(r => r)
-    }, [req])
+    }, [arg])
     return {
-        dataList,
+        resData,
         empty,
-        loading
+        loading,
+        setEmpty,
+        setLoading
     }
 }
-
-export default useRequest

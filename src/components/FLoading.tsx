@@ -1,25 +1,37 @@
 import {Spin} from "antd";
-import React from "react";
-import { getDisplay } from "tools/tools"
+import React, {CSSProperties} from "react";
+import {getDisplay} from "tools/tools"
 
-type ShowBoolean = { show: boolean }
+export type LoadingProps = { show: boolean, style?: CSSProperties }
 
-function FLoading({show}: ShowBoolean) {
-    return (<div style={{
+function FLoading({show, style = {}}: LoadingProps) {
+    const wrapperStyle: CSSProperties = {
         width: "100%",
         height: "100%",
         position: "absolute",
-        zIndex: !getDisplay(show) ? 999999 : -1,
-        background: "white"
+        zIndex: 1,
+        backgroundColor: "rgba(255, 255, 255, .8)",
+        userSelect: "none",
+        display: getDisplay(show)
+    }
+    const spinStyle: CSSProperties = {
+        position: "absolute",
+        top: "300px",
+        left: "50%"
+    }
+
+    return (<div style={{
+        ...wrapperStyle,
+        ...style
     }}>
+        <div style={{
+            position: "fixed",
+            inset: 0,
+            display: getDisplay(show)
+        }} />
         <Spin
             size={'large'}
-            style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                display: getDisplay(show)
-            }}/>
+            style={spinStyle}/>
     </div>)
 }
 

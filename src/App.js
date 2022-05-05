@@ -1,17 +1,11 @@
-import './App.css';
+import '../node_modules/antd/dist/antd.css';
+import 'assets/App.css';
 import React from "react"
 import AppLayout from 'views/Layout'
+import 'tools/moment_zhcn'
 
 function App() {
-	return (
-		<div className="app" style={{
-			height: "100vh",
-			overflowX: "hidden",
-			overflowY: "scroll",
-		}}>
-			<AppLayout />
-		</div>
-	);
+	return <AppLayout />
 }
 
 export default App;

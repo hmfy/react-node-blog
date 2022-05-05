@@ -1,78 +1,68 @@
-import { getDisplay } from "tools/tools"
-import React from "react";
-import { Layout } from "antd";
+import {getDisplay} from "tools/tools"
+import React, {CSSProperties} from "react";
+import {Layout} from "antd";
 import PageFooter from "views/PageFooter";
-import PageHeader from "views/PageHeader";
+import Menu from "views/Menu";
 import {Route, Routes, useLocation} from "react-router-dom";
 import Home from "views/Home";
 import ImgZip from "views/ImgZip";
-import Article from "views/Article";
-import Sticky from "views/Sticky";
+import ArticleList from "views/ArticleList";
 import Time from "views/Time";
-const { Header, Footer, Content } = Layout;
+import WriteArticle from "views/WriteArticle";
+import IsComment from "views/IsComment";
+import ArticleDetail from "views/ArticleDetail";
 
-function AppLayout () {
+const {Header, Footer, Content} = Layout;
 
-	const { pathname } = useLocation()
+function AppLayout() {
 
-	return (
-		<Layout>
-			<Header style={{
-				display: getDisplay(pathname !== '/zip'),
-				// backgroundColor: "black",
-				color: "white"
-			}}>
-				<PageHeader />
-				<div style={{
-					height: 150,
-					position: "relative",
-					display: getDisplay(!window.navigator.userAgent.includes('Mobile')),
-				}}>
-					<img src={'https://fyang.fun/files/ocean.jpg'} style={{
-						width: '100%',
-						height: 150,
-						objectFit: "cover",
-						// objectPosition: "top"
-					}} alt=""/>
-					<div style={{
-						position: "absolute",
-						top: "30%",
-						color: "#ccc",
-						fontSize: "24px",
-						left: "50%",
-						transform: "translateX(-50%)"
-					}}>
-						{/*welcome to my home*/}
-					</div>
-				</div>
-			</Header>
-			<Content style={{
-				width: "100%",
-				marginBottom: "50px"
-			}}>
-				<Routes>
-					<Route path="/" element={
-						<Home/>
-					}/>
-					<Route path="/article" element={
-						<Article />
-					} />
-					<Route path="/sticky" element={
-						<Sticky />
-					} />
-					<Route path="/time" element={
-						<Time />
-					} />
-					<Route path="/zip" element={
-						<ImgZip />
-					} />
-				</Routes>
-			</Content>
-			<Footer>
-				<PageFooter />
-			</Footer>
-		</Layout>
-	)
+    const {pathname} = useLocation()
+    const notNeedHeader = ['/zip']
+
+    const sty: CSSProperties = {
+        display: getDisplay(!notNeedHeader.includes(pathname)),
+        color: "white",
+        marginBottom: "16px"
+    }
+
+    return (
+        <Layout>
+            <Header style={sty}>
+                <Menu/>
+            </Header>
+            <Content style={{
+                width: "100%",
+                marginBottom: "50px"
+            }}>
+                <Routes>
+                    <Route path="/" element={
+                        <Home/>
+                    }/>
+                    <Route path="/list" element={
+                        <ArticleList/>
+                    }/>
+                    <Route path="/comment" element={
+                        <IsComment/>
+                    }/>
+                    <Route path="/time" element={
+                        <Time/>
+                    }/>
+                    <Route path="/zip" element={
+                        <ImgZip/>
+                    }/>
+                    <Route path="/write" element={
+                        <WriteArticle/>
+                    }/>
+                    <Route path="/detail" element={
+                        <ArticleDetail/>
+                    }/>
+                </Routes>
+            </Content>
+            <Footer>
+                <PageFooter/>
+            </Footer>
+        </Layout>
+    )
 }
 
 export default AppLayout

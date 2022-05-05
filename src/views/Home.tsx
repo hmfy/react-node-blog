@@ -8,9 +8,7 @@ function Home () {
 	const { Sider } = Layout
 
 	return (
-		<Layout style={{
-			paddingTop: "10px"
-		}}>
+		<Layout>
 			<Row gutter={ 16 } style={{
 				width: "100%"
 			}}>
@@ -19,7 +17,11 @@ function Home () {
 					<BlogList />
 				</Col>
 				<Col xs={{ span: 0 }} lg={{ span: 6 }} xxl={{ span: 5 }} >
-					<Sider>
+					<Sider style={{
+						position: "sticky",
+						top: 66,
+						zIndex: 1
+					}}>
 						<NewArticle />
 						<HotArticle />
 					</Sider>
