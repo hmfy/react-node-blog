@@ -5,7 +5,7 @@ import "assets/icon.css"
 function TiptapBtn({editor}: { editor: Editor | null }) {
     if (!editor) return null
     return (
-        <div className='btn-list'>
+        <div className='btn-list fxs-flex-wrap'>
             <button
                 onClick={() => editor.chain().focus().toggleBold().run()}
                 className={editor.isActive('bold') ? 'is-active' : ''}

@@ -4,7 +4,7 @@ import Tiptap from "comps/Tiptap";
 
 function WriteArticle () {
     return (
-        <Row>
+        <Row style={{ padding: "0 10px" }}>
             <Col xs={{ span: 0 }} lg={{ span: 2 }} xxl={{ span: 6 }} />
             <Col xs={{ span: 24 }} lg={{ span: 20 }} xxl={{ span: 12 }} style={{ minHeight: "70vh" }}>
                 <Tiptap />

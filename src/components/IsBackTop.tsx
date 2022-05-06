@@ -1,21 +1,45 @@
-import React, {CSSProperties, useState} from "react";
-import {scrollAnimation} from "tools/tools"
+import React, {useEffect, useState} from "react";
+import {getDisplay, scrollAnimation} from "tools/tools"
 import Fire from "comps/Fire";
 import "assets/fire.scss"
 
-function IsBackTop({elem = document.getElementById("root"), domType = 'element'}: { elem?: any, domType?: string }) {
+type Props = {
+    elem?: any,
+    domType?: string,
+    visibleHeight?: number
+}
+
+const root = document.getElementById("root")
+
+function IsBackTop({ elem = root, domType = 'element', visibleHeight = 400 }: Props) {
     const [animate, setAnimate] = useState('is-back-top');
+    const [show, setShow] = useState(false);
+    const getElem = () => domType === 'element' ? elem : elem.el
     const resetAnimation = () => setAnimate('is-back-top')
+    useEffect(() => {
+        if (elem) {
+            const dom = getElem()
+            const control = () => {
+                const num = dom.scrollTop
+                if (num > visibleHeight) {
+                    return setShow(true)
+                }
+                if (num === 0) return setShow(false)
+            }
+            dom.removeEventListener('scroll', control)
+            dom.addEventListener('scroll', control)
+        }
+    }, [elem, domType, visibleHeight, getElem])
     return (
-        <div className={animate}
+        <div className={animate + ' fxs-rocket-offset'}
              onAnimationEnd={resetAnimation}
              onClick={() => {
-                 const dom = domType === 'element' ? elem : elem.el
-                 if (dom.scrollTop < 50) return
-                 scrollAnimation(dom)
+                 scrollAnimation(getElem())
                  setAnimate('is-back-top back-top-animation')
              }}>
-            <Fire/>
+            <div style={{display: getDisplay(show)}}>
+                <Fire/>
+            </div>
         </div>
     )
 }

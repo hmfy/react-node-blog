@@ -1,11 +1,16 @@
 /*
 全局样式
 */
+:root {
+    font-size: 16px;
+}
 
 #root {
     height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
+/*    background-image: url("https://fyang.fun/files/desktopbg.png");
+    background-color: #ddd;*/
 }
 
 .card-box-shadow {
@@ -28,6 +33,10 @@
 
 ::-webkit-scrollbar {
     display: none
+}
+
+.ant-card-actions {
+    border: none;
 }
 
 .ant-card-actions > li:not(:last-child) {
@@ -55,10 +64,7 @@
     z-index: 999999;
     height: auto;
     padding: 0;
-    /*border-bottom: 10px solid white;
-    background-color: black;*/
     background-color: white;
-    box-shadow: 1px 1px 1px #e6e5e4;
 }
 
 .ant-layout-content {

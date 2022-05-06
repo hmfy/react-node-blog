@@ -1,0 +1,37 @@
+@media screen and (max-width: 768px) {
+    // Extra small devices phone xs
+    .fxs-space-between {
+        justify-content: space-between !important;
+    }
+    .fxs-height-30 {
+        height: 30px !important;
+        line-height: 30px !important;
+    }
+    .fxs-min-height-300 {
+        min-height: 300px !important;
+    }
+    .fxs-flex-wrap {
+        flex-wrap: wrap !important;
+        justify-content: flex-start !important;
+    }
+    .fxs-rocket-offset {
+        right: 30px !important;
+    }
+    :root {
+        --rocket-size: 20px !important;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    // Small devices Tablets sm
+
+}
+@media screen and (max-width: 1200px) {
+    // Medium devices md
+
+}
+@media screen and (min-width: 1200px) {
+    // Large devices Desktops lg
+
+}
+

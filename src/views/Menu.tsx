@@ -28,7 +28,7 @@ function MenuItem({ item }:ItemProps) {
 	const menuItemStyle = {
 		marginLeft: '25px',
 		cursor: 'pointer',
-		fontSize: "14px",
+		fontSize: "18px",
 		color: '#868686'
 	}
 
@@ -56,7 +56,7 @@ function MenuList({menuList = []}:{
 	}
 
 	return (
-		<div style={ sty }>
+		<div style={ sty } className='fxs-space-between'>
 			{
 				menuList.map(
 					(item, index) => <MenuItem key={index} item={item}/>
@@ -76,11 +76,6 @@ function Menu() {
 		{name: '写作', path: '/write'},
 	])
 
-	const menuStyle = {
-		display: 'flex',
-		justifyContent: "space-between"
-	}
-
 	const wrapperStyle = {
 		height: '50px',
 		lineHeight: '50px'
@@ -97,14 +92,14 @@ function Menu() {
 	return (
 		<div style={wrapperStyle}>
 			<Row>
-				<Col xs={{ span: 1 }} lg={{ span: 3 }} xxl={{ span: 6 }} />
-				<Col xs={{ span: 22 }} lg={{ span: 18 }} xxl={{ span: 12 }}>
-					<div style={menuStyle}>
-						<Input placeholder="search your keywords" style={ inputStyle }  bordered={false} />
-						<MenuList menuList={menuList}/>
-					</div>
+				<Col xs={{ span: 0 }} lg={{ span: 3 }} xxl={{ span: 6 }} />
+				<Col xs={{ span: 0 }} lg={{ span: 9 }} xxl={{ span: 6 }}>
+					<Input placeholder="search your keywords" style={ inputStyle }  bordered={false} />
 				</Col>
-				<Col xs={{ span: 1 }} lg={{ span: 3 }} xxl={{ span: 6 }} />
+				<Col xs={{ span: 22 }} lg={{ span: 9 }} xxl={{ span: 6 }}>
+					<MenuList menuList={menuList}/>
+				</Col>
+				<Col xs={{ span: 0 }} lg={{ span: 3 }} xxl={{ span: 6 }} />
 			</Row>
 		</div>
 	)

@@ -23,13 +23,17 @@
     animation: blacktop 1s ease-out alternate;
 }
 
+.back-top-empty:empty {
+    display: none;
+}
+
 @keyframes blacktop {
     to {
         transform: translateY(-70vh);
         opacity: 0;
     }
 }
-
+// 火箭
 .wrapper {
     cursor: pointer;
 }

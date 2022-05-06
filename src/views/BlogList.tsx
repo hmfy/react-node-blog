@@ -1,4 +1,4 @@
-import React, {CSSProperties, useEffect, useRef, useState} from 'react'
+import React, {CSSProperties, useRef } from 'react'
 import {Card} from "antd";
 import {HistoryOutlined, ReadOutlined} from '@ant-design/icons';
 import FEmpty from "comps/FEmpty";
@@ -7,6 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import useScrollLoad from "hooks/useScrollLoad";
 import {useNavigate} from "react-router-dom";
 import IsBackTop from "comps/IsBackTop";
+import moment from "moment";
 
 type ListItem = {
     id: number
@@ -17,32 +18,30 @@ type ListItem = {
 type List = Array<ListItem>
 
 function Blog({title, content, createTime, id}: ListItem) {
-    const hoverColor: CSSProperties = {color: "rgba(0, 0, 0, 0.45)"}
     const buttonSpace: CSSProperties = {marginRight: "5px"}
-    const cardStyle: CSSProperties = {width: '100%', marginBottom: '16px', cursor: "pointer"}
+    const cardStyle: CSSProperties = {width: '100%', cursor: "pointer", border: "none", borderBottom: "2px solid #f0f0f0" }
     const titleStyle: CSSProperties = {fontWeight: "bold", fontSize: "16px"}
     const navigate = useNavigate()
-    const actions = [
-        <span style={hoverColor}>
-			<HistoryOutlined style={buttonSpace}/>
-            {createTime}
-		</span>,
-        <span onClick={() => {
-            navigate('/detail', { state: { articleID: id }, replace: false })
-        }}>
-			<ReadOutlined style={buttonSpace} />
-			阅读全文
-        </span>
-    ]
-    return (<Card
-        style={cardStyle}
-        className={'card-box-shadow'}
-        actions={actions}>
-        <p style={titleStyle}>
+    return (<Card style={cardStyle}>
+        <div style={titleStyle}>
             {title}
-        </p>
-        <div className={'overflow-dot'}>
-            {content}
+        </div>
+        <div>
+            <div className={'overflow-dot'}>
+                {content}
+            </div>
+            <div style={{ textAlign: "right", color: "rgba(0, 0, 0, 0.45)", marginTop: "10px" }}>
+                <span>
+                    <HistoryOutlined style={buttonSpace}/>
+                        { moment(createTime).fromNow() }
+                </span>
+                <span style={{ marginLeft: "30px" }} className="hover-blue" onClick={() => {
+                    navigate('/detail', { state: { articleID: id }, replace: false })
+                }}>
+                    <ReadOutlined style={buttonSpace} />
+                    阅读全文
+                </span>
+            </div>
         </div>
     </Card>)
 }

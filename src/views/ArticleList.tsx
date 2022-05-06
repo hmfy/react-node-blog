@@ -34,7 +34,7 @@ const ArticleItem = ({content, id}: ListItem) => {
     }
 
     const navigate = useNavigate()
-    return (<div className={'hover-blue'}
+    return (<div className='hover-blue fxs-height-30'
                  style={wrapperStyle}>
         <div style={contentStyle}>
             {content}
@@ -77,7 +77,7 @@ function ArticleList() {
         <Row>
             <Col xs={{span: 1}} lg={{span: 2}} xxl={{span: 6}}/>
             <Col xs={{span: 22}} lg={{span: 20}} xxl={{span: 12}}>
-                <div style={{minHeight: 500}}>
+                <div style={{minHeight: 500}} className='fxs-min-height-300'>
                     <FLoading show={loading}/>
                     {
                         list.map(ele => <ArticleItem {...ele} />)

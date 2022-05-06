@@ -4,6 +4,7 @@ import FEmpty from "comps/FEmpty";
 import useRequest from "hooks/useRequest";
 import {Card, Col, Row, Timeline} from "antd";
 import IsBackTop from "comps/IsBackTop";
+import moment from "moment";
 
 type ListItem = {
     id: number
@@ -55,7 +56,7 @@ function Time() {
                     <FLoading show={loading}/>
                     {
                         list.map(timeItem => (
-                            <Timeline.Item label={timeItem.createTime}>
+                            <Timeline.Item label={ moment(timeItem.createTime).fromNow() }>
                                 <ItemCard {...timeItem} />
                             </Timeline.Item>
                         ))

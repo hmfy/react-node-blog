@@ -23,7 +23,7 @@ function ListItem({content, id}: ListItem) {
         display: "block",
         cursor: "pointer",
     }
-    return (<List.Item style={itemStyle} onClick={() => {
+    return (<List.Item style={itemStyle} className="hover-blue" onClick={() => {
         navigate('/detail', { state: { articleID: id }, replace: false })
     }}>
         {content}
