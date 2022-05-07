@@ -3,7 +3,7 @@ import FList from "comps/FList"
 
 function HotArticle () {
 	return (
-		<FList title='热门' url='/hotArticle'/>
+		<FList title='热门' path='article.hot'/>
 	)
 }
 export default HotArticle

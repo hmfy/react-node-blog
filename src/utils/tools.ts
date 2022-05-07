@@ -10,16 +10,12 @@ export const instance = axios.create({baseURL: baseUrl})
 // 转化 boolean 为 Display 类型
 export const getDisplay = (show: boolean): (Property.Display | undefined) => ((!show && "none") || undefined)
 
-const backTopStyle = {
-    height: 40,
-    width: 40,
-    lineHeight: '40px',
-    borderRadius: 4,
-    backgroundColor: '#1088e9',
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 14,
-};
+// 格式化 HTML
+export const parseHTML = (html:string) => {
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = html
+    return wrapper.innerText
+}
 
 /* body回到顶部 */
 export function scrollAnimation(dom:any, callback?: () => any) {

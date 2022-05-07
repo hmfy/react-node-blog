@@ -5,6 +5,7 @@ import useRequest from "hooks/useRequest";
 import {Card, Col, Row, Timeline} from "antd";
 import IsBackTop from "comps/IsBackTop";
 import moment from "moment";
+import {parseHTML} from "tools/tools";
 
 type ListItem = {
     id: number
@@ -37,13 +38,15 @@ function ItemCard({title, content}: ListItem): ReactElement {
             {title}
         </p>
         <div className={'overflow-dot'}>
-            {content}
+            { parseHTML(content) }
         </div>
     </Card>)
 }
 
 function Time() {
-    const [ params ] = useState({ url: '/articleList' })
+    const [ params ] = useState({
+        data: { path: "article.log" }
+    })
     let {empty, loading, resData} = useRequest(params)
     const list: List = resData.list
     const wrapperStyle: CSSProperties = {paddingTop: 10, minHeight: 300, width: "100%"}

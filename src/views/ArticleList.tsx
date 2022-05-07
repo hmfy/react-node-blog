@@ -5,6 +5,7 @@ import FEmpty from "comps/FEmpty";
 import {Col, Pagination, Row} from "antd";
 import {DeleteOutlined, EditOutlined, ReadOutlined} from '@ant-design/icons';
 import {useNavigate} from "react-router-dom";
+import {parseHTML} from "tools/tools";
 
 type ListItem = { content: string, id: number }
 
@@ -37,7 +38,7 @@ const ArticleItem = ({content, id}: ListItem) => {
     return (<div className='hover-blue fxs-height-30'
                  style={wrapperStyle}>
         <div style={contentStyle}>
-            {content}
+            {parseHTML(content)}
         </div>
         <div style={toolbarStyle}>
             <ReadOutlined onClick={() => {
@@ -53,8 +54,8 @@ function ArticleList() {
     const [ currentPage, setCurrentPage ] = useState(1)
     const pageSize = 10
     const [ params, setParams ] = useState({
-        url: '/articleList',
         data: {
+            path: 'article.list',
             pageSize: pageSize,
             pageNo: currentPage
         }
@@ -67,6 +68,7 @@ function ArticleList() {
         setParams({
             ...params,
             data: {
+                ...params.data,
                 pageSize: pageSize,
                 pageNo: page
             }

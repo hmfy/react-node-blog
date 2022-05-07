@@ -3,6 +3,7 @@ import useRequest, {Params} from "hooks/useRequest";
 
 interface Props extends Params {
     data: {
+        path?: string
         pageNo: number
     }
 }

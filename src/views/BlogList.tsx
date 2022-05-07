@@ -8,6 +8,7 @@ import useScrollLoad from "hooks/useScrollLoad";
 import {useNavigate} from "react-router-dom";
 import IsBackTop from "comps/IsBackTop";
 import moment from "moment";
+import {parseHTML} from "tools/tools";
 
 type ListItem = {
     id: number
@@ -28,7 +29,7 @@ function Blog({title, content, createTime, id}: ListItem) {
         </div>
         <div>
             <div className={'overflow-dot'}>
-                {content}
+                { parseHTML(content) }
             </div>
             <div style={{ textAlign: "right", color: "rgba(0, 0, 0, 0.45)", marginTop: "10px" }}>
                 <span>
@@ -52,8 +53,10 @@ function BlogList() {
     const {
         list, empty, loading, bodyHeight, fetchData, hasMore
     } = useScrollLoad<List>({
-        url: '/articleList',
-        data: {pageNo: 1}
+        data: {
+            path: "article.list",
+            pageNo: 1
+        }
     })
     const reactElem = useRef(null)
 

@@ -8,6 +8,7 @@ import moment from "moment";
 import { FieldTimeOutlined, EnvironmentOutlined, ReadOutlined } from '@ant-design/icons';
 import {scrollAnimation} from "tools/tools";
 import IsBackTop from "comps/IsBackTop";
+import Tiptap from "comps/Tiptap";
 
 function ArticleDetail() {
     const {state} = useLocation()
@@ -34,9 +35,9 @@ type Article = Array<{
 
 function Detail(props: { articleID: number }) {
     const [params, setParams] = useState({
-        url: "/getArticleDetail",
         data: {
-            id: props.articleID
+            path: "article.detail",
+            ID: props.articleID
         }
     })
     const {resData, empty, loading, setLoading} = useRequest(params)
@@ -46,7 +47,8 @@ function Detail(props: { articleID: number }) {
             setParams({
                 ...params,
                 data: {
-                    id: ID
+                    ...params.data,
+                    ID: ID
                 }
             })
         })
@@ -86,6 +88,7 @@ function Detail(props: { articleID: number }) {
             <FLoading show={loading}/>
             <div style={{ fontSize: "16px" }}>
                 <div style={titleStyle}>{title}</div>
+                {/*<Tiptap initialValue={content} />*/}
                 <div dangerouslySetInnerHTML={{__html: content}}/>
                 <div style={footerStyle}>
                     <ReadOutlined /> { see }

@@ -1,15 +1,15 @@
-import { EditorContent, ReactNodeViewRenderer, useEditor} from "@tiptap/react"
+import {Editor, EditorContent, ReactNodeViewRenderer, useEditor} from "@tiptap/react"
 import Starterkit from "@tiptap/starter-kit"
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import lowlight from 'lowlight'
-import React from "react";
+import React, {Dispatch, SetStateAction, useEffect} from "react";
 import "assets/tiptap.scss"
 import CodeBlockComponent from "comps/CodeBlockComponent";
 import TiptapBtn from "./TiptapBtn"
 
-const content = "<p>hello world</p>"
+type Props = { initialValue?: string, setEditor?: Dispatch<SetStateAction<Editor | null>> }
 
-function Tiptap() {
+function Tiptap({ initialValue = '', setEditor = () => {} }: Props) {
     const editor = useEditor({
         extensions: [
             Starterkit,
@@ -23,12 +23,15 @@ function Tiptap() {
                     lowlight
                 })
         ],
-        content: content,
+        content: initialValue,
         autofocus: 'end'
     })
+    useEffect(() => {
+        setEditor(editor)
+    }, [editor])
     return (<div className="editor">
         <TiptapBtn editor={editor}/>
-        <EditorContent editor={editor}/>
+        <EditorContent editor={editor} />
     </div>)
 }
 

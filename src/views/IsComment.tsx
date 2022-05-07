@@ -143,8 +143,10 @@ function IsComment() {
     const {
         list, empty, loading, bodyHeight, fetchData, hasMore
     } = useScrollLoad<List>({
-        url: '/getComment',
-        data: { pageNo: 1 }
+        data: {
+            pageNo: 1,
+            path: 'comment.list'
+        }
     })
     const reactElem = useRef(null)
     const [comment, setComment] = useState(list);

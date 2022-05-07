@@ -3,18 +3,19 @@ import {List} from "antd"
 import FLoading from "comps/FLoading";
 import useRequest from "hooks/useRequest";
 import {useNavigate} from "react-router-dom";
+import {parseHTML} from "tools/tools";
 
 export type ListItem = { title: string, content: string, id: number }
 
 export type List = Array<ListItem>
 
 export type ListParams = {
-    url: string
+    path: string
     style?: CSSProperties
     title: string
 }
 
-function ListItem({content, id}: ListItem) {
+function ListItem({title, id}: ListItem) {
     const navigate = useNavigate()
     const itemStyle: CSSProperties = {
         whiteSpace: "nowrap",
@@ -26,7 +27,7 @@ function ListItem({content, id}: ListItem) {
     return (<List.Item style={itemStyle} className="hover-blue" onClick={() => {
         navigate('/detail', { state: { articleID: id }, replace: false })
     }}>
-        {content}
+        { parseHTML(title) }
     </List.Item>)
 }
 
@@ -35,8 +36,12 @@ const Header = ({title}: { title: string }) => {
     return (<div style={sty}>{title}</div>)
 }
 
-function FList({url, title, style}: ListParams) {
-    const [ params ] = useState({ url: url })
+function FList({path, title, style}: ListParams) {
+    const [ params ] = useState({
+        data: {
+            path: path
+        }
+    })
     let {loading, resData} = useRequest(params)
     const list: List = resData.list
     const wrapperStyle: CSSProperties = {position: "relative", minHeight: "200px"}
