@@ -1,0 +1,21 @@
+.btn-list {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #F5F5F5;
+    padding: 5px;
+    button {
+        background: white;
+        color: black;
+        outline: none;
+        font-size: 18px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        &:hover {
+            background: #e6e6e6;
+        }
+        &.is-active {
+            background: #e6e6e6;
+        }
+    }
+}

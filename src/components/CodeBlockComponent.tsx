@@ -55,7 +55,7 @@ function LanguageSelect(props: Props) {
 }
 
 export default (props: Props) => (
-    <NodeViewWrapper className="code-block">
+    <NodeViewWrapper>
         <pre>
             {/*<LanguageSelect {...props} />*/}
             <NodeViewContent as="code"/>

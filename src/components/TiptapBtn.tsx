@@ -1,6 +1,7 @@
 import {Editor} from "@tiptap/react"
 import React from "react"
 import "assets/icon.css"
+import "assets/tiptap-btn.scss"
 
 function TiptapBtn({editor}: { editor: Editor | null }) {
     if (!editor) return null

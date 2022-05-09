@@ -54,6 +54,7 @@ function ArticleList() {
     const [ currentPage, setCurrentPage ] = useState(1)
     const pageSize = 10
     const [ params, setParams ] = useState({
+        url: '/pageQuery2',
         data: {
             path: 'article.list',
             pageSize: pageSize,
@@ -82,7 +83,7 @@ function ArticleList() {
                 <div style={{minHeight: 500}} className='fxs-min-height-300'>
                     <FLoading show={loading}/>
                     {
-                        list.map(ele => <ArticleItem {...ele} />)
+                        list.map((ele, index) => <ArticleItem key={index} {...ele} />)
                     }
                     <FEmpty show={empty}/>
                 </div>

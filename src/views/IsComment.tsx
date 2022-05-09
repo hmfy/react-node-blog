@@ -1,13 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Comment, Form, Input, Button, List, Col, Row, BackTop} from 'antd';
+import {Comment, Form, Input, Button, List, Col, Row } from 'antd';
 import moment from 'moment';
 import useScrollLoad from "hooks/useScrollLoad";
-import axios from "axios";
 import FLoading from "comps/FLoading";
 import FEmpty from "comps/FEmpty";
 import InfiniteScroll from "react-infinite-scroll-component";
-import AppLayout from "views/Layout";
 import IsBackTop from "comps/IsBackTop";
+import {request} from "hooks/useRequest";
 const {TextArea} = Input
 
 type Event = {
@@ -20,7 +19,7 @@ type ListItem = {
     id: number
     author: string
     content: string
-    createTime: string
+    createTime: number
 }
 
 type List = Array<ListItem>
@@ -35,9 +34,6 @@ type EditAreaProps = {
     commentLength: number
 }
 
-function addComment() {
-    return axios.post('https://www.fastmock.site/mock/5a9f84630f3ede0293cf99c7f56c0644/blog/addComment')
-}
 function getAddress () {
     return {
         then (func: Function):void {
@@ -54,7 +50,7 @@ const Item = ({itemData}: { itemData: ListItem }) => {
     const { author, content, createTime } = itemData
     return (
         <Comment
-            author={<Box data={author + '网友'} />}
+            author={<Box data={(author || '') + '网友'} />}
             content={<Box data={content} />}
             datetime={<Box data={moment(createTime).fromNow()} />}
         />
@@ -62,7 +58,7 @@ const Item = ({itemData}: { itemData: ListItem }) => {
 }
 
 // 留言列表
-const MyList = ({data}:{data: List}) => {
+const MyList = ({ data }:{data: List}) => {
     return (<List
         itemLayout="horizontal"
         dataSource={data}
@@ -105,12 +101,21 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
     const handleSubmit = async () => {
         if (!commentVal) return
         setBtnLoading(true)
-        const { data: { id } } = await addComment()
+        const { data: { list }  } = await request<Array<{ ID: number }>>({
+            url: '/execute',
+            data: {
+                path: 'comment.add',
+                content: commentVal,
+                createTime: Date.now(),
+                address: null
+            }
+        })
+
         commentRefresh({
             author: name + '网友',
             content: commentVal,
-            id: id,
-            createTime: String(new Date()),
+            id: list[0].ID,
+            createTime: Date.now(),
         })
         setBtnLoading(false)
         setCommentVal('')
@@ -144,7 +149,6 @@ function IsComment() {
         list, empty, loading, bodyHeight, fetchData, hasMore
     } = useScrollLoad<List>({
         data: {
-            pageNo: 1,
             path: 'comment.list'
         }
     })

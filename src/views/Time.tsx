@@ -58,8 +58,8 @@ function Time() {
                 <Timeline mode="alternate">
                     <FLoading show={loading}/>
                     {
-                        list.map(timeItem => (
-                            <Timeline.Item label={ moment(timeItem.createTime).fromNow() }>
+                        list.map((timeItem, index) => (
+                            <Timeline.Item key={index} label={ moment(timeItem.createTime).fromNow() }>
                                 <ItemCard {...timeItem} />
                             </Timeline.Item>
                         ))

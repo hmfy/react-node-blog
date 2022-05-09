@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Navigate, useLocation} from "react-router-dom";
 import useRequest from "hooks/useRequest";
-import { Col, Row } from "antd";
+import {Col, message, Row} from "antd";
 import FLoading from "comps/FLoading";
 import FEmpty from "comps/FEmpty";
 import moment from "moment";
@@ -41,7 +41,10 @@ function Detail(props: { articleID: number }) {
         }
     })
     const {resData, empty, loading, setLoading} = useRequest(params)
-    const changePage = (ID:number) => {
+    const changePage = async (ID:number) => {
+        if (ID < 0) {
+            return message.info((ID === -1) ? '已经是第一篇了' : '已经是最后一篇了')
+        }
         const dom = document.getElementById('root')
         scrollAnimation(dom, () => {
             setParams({
@@ -60,8 +63,8 @@ function Detail(props: { articleID: number }) {
         createTime = '',
         see = 0,
         address = '',
-        prevTitle = '没有了',
-        nextTitle = '没有了',
+        prevTitle = '',
+        nextTitle = '',
         prevID = 0,
         nextID = 0,
     } = {}] = resData.list as Article
@@ -88,8 +91,7 @@ function Detail(props: { articleID: number }) {
             <FLoading show={loading}/>
             <div style={{ fontSize: "16px" }}>
                 <div style={titleStyle}>{title}</div>
-                {/*<Tiptap initialValue={content} />*/}
-                <div dangerouslySetInnerHTML={{__html: content}}/>
+                <Tiptap initialValue={content} editable={ false } />
                 <div style={footerStyle}>
                     <ReadOutlined /> { see }
                     <span style={{ marginLeft: 30 }}>
@@ -101,18 +103,18 @@ function Detail(props: { articleID: number }) {
                 </div>
                 <div style={footerStyle}>
                     <div style={ tipsStyle }  className='hover-blue'>
-                        <span onClick={() => changePage(prevID)}>上一篇</span>
-                        <span onClick={() => changePage(nextID)}>下一篇</span>
+                        <span onClick={() => changePage(prevID || -1)}>上一篇</span>
+                        <span onClick={() => changePage(nextID || -2)}>下一篇</span>
                     </div>
                     <div style={{
                         ...tipsStyle,
                         color: "black"
                     }}>
                             <span>
-                                { prevTitle }
+                                { prevTitle || '没有了' }
                             </span>
                         <span>
-                                { nextTitle }
+                                { nextTitle || '没有了' }
                             </span>
                     </div>
                 </div>

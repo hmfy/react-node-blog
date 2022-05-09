@@ -1,23 +1,23 @@
 import {useEffect, useState} from "react"
 import {AxiosRequestHeaders} from "axios";
-import {instance} from "tools/tools"
-import {message} from "antd";
+import {getInstance} from "tools/tools"
+import {message, Modal} from "antd";
 
-export type ResData = {
-    err?: null | string
-    list: []
-    pageQuery?: boolean,
-    pageSiz?: number,
-    pageNo?: number,
+export type ResData<T = []> = {
+    err: null | object
+    list: T
+    pageQuery?: boolean
+    pageSiz?: number
+    pageNo?: number
     total?: number
+    token?: string
 }
 
-export type Response = {
-    data: ResData
+export type Response<S = []> = {
+    data: ResData<S>
 }
 
 export type Params = {
-    needReq?: boolean
     url?: string
     data?: object
     headers?: AxiosRequestHeaders
@@ -27,43 +27,72 @@ export type Params = {
 
 export default useRequest
 
-// const mockUrl = 'https://www.fastmock.site/mock/5a9f84630f3ede0293cf99c7f56c0644/blog'
-const defaultAPI = '/execute'
+const defaultAPI = '/execute2'
 
-export function request({ url = defaultAPI, ...resetParams }:Params): Promise<Response> {
-    return instance.request({
-        url: url,
-        method: 'POST',
-        ...resetParams
+export function request<S = []>(a: Params): Promise<Response<S>>
+export async function request({url = defaultAPI, ...resetParams}: Params): Promise<Response> {
+    // const navigate = useNavigate()
+    // const { pathname } = useLocation()
+    return new Promise(async (resolve, reject) => {
+        getInstance().request({
+            url: url,
+            method: 'POST',
+            ...resetParams
+        })
+            .then(result => {
+                const { data: { err } } = result
+
+                if (err) {
+                    message.error(err)
+                    resolve({
+                        data: {
+                            err: err,
+                            list: []
+                        }
+                    })
+                }
+                resolve(result)
+            })
+            .catch(error => {
+                if (!error.response) {
+                    reject(error)
+                }
+                if (error.response.statusText === "Unauthorized") {
+                    Modal.warning({
+                        keyboard: false,
+                        okText: "去登陆",
+                        closable: true,
+                        centered: true,
+                        content: '当前页面需要登陆才能继续访问',
+                        onOk () {
+                            window.location.href =  window.location.origin + '/login?' + window.location.pathname
+                        },
+                        onCancel () {
+                            window.location.href =  window.location.origin + '/'
+                        }
+                    })
+                }
+            })
     })
 }
 
-function useRequest(arg:Params): {
+function useRequest(arg: Params): {
     resData: ResData,
     empty: boolean,
     loading: boolean,
-    setEmpty: (b:boolean) => any,
-    setLoading: (b:boolean) => any
+    setEmpty: (b: boolean) => any,
+    setLoading: (b: boolean) => any
 }
 function useRequest(arg: Params) {
-    const [resData, setResData] = useState<ResData>({list: []})
+    const [resData, setResData] = useState<ResData>({list: [], err: null})
     const [empty, setEmpty] = useState(false)
     const [loading, setLoading] = useState(true)
     useEffect(() => {
-        const { needReq = true } = arg
-        if (!needReq) return
-        async function fetchData() {
-            const { data } = await request(arg)
-            if (data.err) {
-                message.error(data.err)
-                return setLoading(false)
-            }
+        request(arg).then(({data}) => {
             setResData(data)
             if (!data.list.length) setEmpty(true)
             setLoading(false)
-        }
-
-        fetchData().then(r => r)
+        }).catch(e => console.log(e))
     }, [arg])
     return {
         resData,

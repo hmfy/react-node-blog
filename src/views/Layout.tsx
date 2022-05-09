@@ -11,13 +11,14 @@ import Time from "views/Time";
 import WriteArticle from "views/WriteArticle";
 import IsComment from "views/IsComment";
 import ArticleDetail from "views/ArticleDetail";
+import Login from "views/Login";
 
 const {Header, Footer, Content} = Layout;
 
 function AppLayout() {
 
     const {pathname} = useLocation()
-    const notNeedHeader = ['/zip']
+    const notNeedHeader = ['/zip', '/write', '/login']
 
     const sty: CSSProperties = {
         display: getDisplay(!notNeedHeader.includes(pathname)),
@@ -52,6 +53,9 @@ function AppLayout() {
                     }/>
                     <Route path="/write" element={
                         <WriteArticle/>
+                    }/>
+                    <Route path="/login" element={
+                        <Login />
                     }/>
                     <Route path="/detail" element={
                         <ArticleDetail/>

@@ -1,4 +1,4 @@
-import React, {CSSProperties, useRef } from 'react'
+import React, {CSSProperties, useEffect, useRef, useState} from 'react'
 import {Card} from "antd";
 import {HistoryOutlined, ReadOutlined} from '@ant-design/icons';
 import FEmpty from "comps/FEmpty";
@@ -21,14 +21,16 @@ type List = Array<ListItem>
 function Blog({title, content, createTime, id}: ListItem) {
     const buttonSpace: CSSProperties = {marginRight: "5px"}
     const cardStyle: CSSProperties = {width: '100%', cursor: "pointer", border: "none", borderBottom: "2px solid #f0f0f0" }
-    const titleStyle: CSSProperties = {fontWeight: "bold", fontSize: "16px"}
+    const titleStyle: CSSProperties = {fontWeight: "bold", fontSize: "16px", marginBottom: 10}
     const navigate = useNavigate()
     return (<Card style={cardStyle}>
         <div style={titleStyle}>
             {title}
         </div>
         <div>
-            <div className={'overflow-dot'}>
+            <div className={'overflow-dot'} onClick={() => {
+                navigate('/detail', { state: { articleID: id }, replace: false })
+            }}>
                 { parseHTML(content) }
             </div>
             <div style={{ textAlign: "right", color: "rgba(0, 0, 0, 0.45)", marginTop: "10px" }}>
@@ -54,8 +56,7 @@ function BlogList() {
         list, empty, loading, bodyHeight, fetchData, hasMore
     } = useScrollLoad<List>({
         data: {
-            path: "article.list",
-            pageNo: 1
+            path: "article.list"
         }
     })
     const reactElem = useRef(null)
@@ -73,7 +74,7 @@ function BlogList() {
                 loader={<span> </span>}
             >
                 {
-                    list.map(blog => <Blog key={blog.id} {...blog}/>)
+                    list.map((blog, index) => <Blog key={index} {...blog}/>)
                 }
             </InfiniteScroll>
             <FEmpty show={empty}/>

@@ -7,12 +7,34 @@ import "assets/tiptap.scss"
 import CodeBlockComponent from "comps/CodeBlockComponent";
 import TiptapBtn from "./TiptapBtn"
 
-type Props = { initialValue?: string, setEditor?: Dispatch<SetStateAction<Editor | null>> }
+type Props = { initialValue?: string, setEditor?: Dispatch<SetStateAction<Editor | null>>, editable?: boolean }
 
-function Tiptap({ initialValue = '', setEditor = () => {} }: Props) {
+function Tiptap({ initialValue = '', setEditor = () => {}, editable = true }: Props) {
     const editor = useEditor({
         extensions: [
-            Starterkit,
+            /*
+            *  blockquote: Partial<BlockquoteOptions> | false,
+              bold: Partial<BoldOptions> | false,
+              bulletList: Partial<BulletListOptions> | false,
+              code: Partial<CodeOptions> | false,
+              codeBlock: Partial<CodeBlockOptions> | false,
+              document: false,
+              dropcursor: Partial<DropcursorOptions> | false,
+              gapcursor: false,
+              hardBreak: Partial<HardBreakOptions> | false,
+              heading: Partial<HeadingOptions> | false,
+              history: Partial<HistoryOptions> | false,
+              horizontalRule: Partial<HorizontalRuleOptions> | false,
+              italic: Partial<ItalicOptions> | false,
+              listItem: Partial<ListItemOptions> | false,
+              orderedList: Partial<OrderedListOptions> | false,
+              paragraph: Partial<ParagraphOptions> | false,
+              strike: Partial<StrikeOptions> | false,
+              text: false,
+            * */
+            Starterkit.configure({
+                codeBlock: false
+            }),
             CodeBlockLowlight
                 .extend({
                     addNodeView() {
@@ -24,15 +46,16 @@ function Tiptap({ initialValue = '', setEditor = () => {} }: Props) {
                 })
         ],
         content: initialValue,
-        autofocus: 'end'
+        autofocus: 'end',
+        editable: editable
     })
+    useEffect(() => {
+        editor?.commands.setContent(initialValue)
+    }, [ initialValue ])
     useEffect(() => {
         setEditor(editor)
     }, [editor])
-    return (<div className="editor">
-        <TiptapBtn editor={editor}/>
-        <EditorContent editor={editor} />
-    </div>)
+    return <EditorContent editor={editor} />
 }
 
 export default Tiptap

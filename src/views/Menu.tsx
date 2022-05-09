@@ -70,10 +70,10 @@ function Menu() {
 	const [menuList] = useState([
 		{name: '主页', path: '/'},
 		{name: '目录', path: '/list'},
-		// {name: '随笔', path: '/sticky'},
 		{name: '日志', path: '/time'},
 		{name: '留言', path: '/comment'},
-		{name: '写作', path: '/write'},
+		// {name: '随笔', path: '/sticky'},
+		// {name: '写作', path: '/write'},
 	])
 
 	const wrapperStyle = {
