@@ -1,14 +1,16 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Navigate, useLocation} from "react-router-dom";
 import useRequest from "hooks/useRequest";
 import {Col, message, Row} from "antd";
 import FLoading from "comps/FLoading";
 import FEmpty from "comps/FEmpty";
-import moment from "moment";
+import moment from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { FieldTimeOutlined, EnvironmentOutlined, ReadOutlined } from '@ant-design/icons';
-import {scrollAnimation} from "tools/tools";
+import {scrollAnimation, setAddress} from "tools/tools";
 import IsBackTop from "comps/IsBackTop";
 import Tiptap from "comps/Tiptap";
+moment.extend(relativeTime)
 
 function ArticleDetail() {
     const {state} = useLocation()
@@ -34,6 +36,9 @@ type Article = Array<{
 }>
 
 function Detail(props: { articleID: number }) {
+    useEffect(() => {
+        setAddress(props.articleID)
+    }, [])
     const [params, setParams] = useState({
         data: {
             path: "article.detail",

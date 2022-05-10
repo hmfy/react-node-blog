@@ -1,4 +1,4 @@
-import React, {CSSProperties, useEffect, useRef, useState} from 'react'
+import React, {CSSProperties, useRef } from 'react'
 import {Card} from "antd";
 import {HistoryOutlined, ReadOutlined} from '@ant-design/icons';
 import FEmpty from "comps/FEmpty";
@@ -7,8 +7,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import useScrollLoad from "hooks/useScrollLoad";
 import {useNavigate} from "react-router-dom";
 import IsBackTop from "comps/IsBackTop";
-import moment from "moment";
+import moment from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime'
 import {parseHTML} from "tools/tools";
+moment.extend(relativeTime)
 
 type ListItem = {
     id: number
@@ -49,11 +51,11 @@ function Blog({title, content, createTime, id}: ListItem) {
     </Card>)
 }
 
-const titleStyle: CSSProperties = {position: "relative", minHeight: "500px"}
+const titleStyle: CSSProperties = {position: "relative"}
 
 function BlogList() {
     const {
-        list, empty, loading, bodyHeight, fetchData, hasMore
+        list, empty, loading, bodyHeight, fetchData
     } = useScrollLoad<List>({
         data: {
             path: "article.list"
@@ -70,14 +72,14 @@ function BlogList() {
                 height={bodyHeight}
                 dataLength={list.length}
                 next={fetchData}
-                hasMore={hasMore}
+                hasMore={true}
                 loader={<span> </span>}
             >
                 {
                     list.map((blog, index) => <Blog key={index} {...blog}/>)
                 }
+                <FEmpty show={empty}/>
             </InfiniteScroll>
-            <FEmpty show={empty}/>
             <IsBackTop elem={reactElem.current} domType={'reactElem'} />
         </div>
     )

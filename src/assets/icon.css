@@ -23,6 +23,8 @@
 .ri-h-1:before { content: "\ede6"; }
 .ri-h-2:before { content: "\ede7"; }
 .ri-h-3:before { content: "\ede8"; }
+.ri-h-4:before { content: "\ede9"; }
+.ri-h-5:before { content: "\edea"; }
 .ri-blockquote:before { content: "\ec51"; }
 .ri-horizontal:before { content: "\f0de"; }
 .ri-link:before { content: "\eeaf"; }

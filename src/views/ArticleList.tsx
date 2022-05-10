@@ -3,7 +3,9 @@ import useRequest from "hooks/useRequest";
 import FLoading from "comps/FLoading";
 import FEmpty from "comps/FEmpty";
 import {Col, Pagination, Row} from "antd";
-import {DeleteOutlined, EditOutlined, ReadOutlined} from '@ant-design/icons';
+import {
+    // DeleteOutlined, EditOutlined
+    ReadOutlined} from '@ant-design/icons';
 import {useNavigate} from "react-router-dom";
 import {parseHTML} from "tools/tools";
 
@@ -44,8 +46,8 @@ const ArticleItem = ({content, id}: ListItem) => {
             <ReadOutlined onClick={() => {
                 navigate('/detail', { state: { articleID: id }, replace: false })
             }} />
-            <EditOutlined style={{marginLeft: 20}}/>
-            <DeleteOutlined style={{marginLeft: 20}}/>
+            {/*<EditOutlined style={{marginLeft: 20}}/>*/}
+            {/*<DeleteOutlined style={{marginLeft: 20}}/>*/}
         </div>
     </div>)
 }

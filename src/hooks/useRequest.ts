@@ -31,8 +31,6 @@ const defaultAPI = '/execute2'
 
 export function request<S = []>(a: Params): Promise<Response<S>>
 export async function request({url = defaultAPI, ...resetParams}: Params): Promise<Response> {
-    // const navigate = useNavigate()
-    // const { pathname } = useLocation()
     return new Promise(async (resolve, reject) => {
         getInstance().request({
             url: url,

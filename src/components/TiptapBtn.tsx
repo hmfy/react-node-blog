@@ -44,6 +44,18 @@ function TiptapBtn({editor}: { editor: Editor | null }) {
                 <i className='ri-h-3' />
             </button>
             <button
+                onClick={() => editor.chain().focus().toggleHeading({level: 4}).run()}
+                className={editor.isActive('heading', {level: 4}) ? 'is-active' : ''}
+            >
+                <i className='ri-h-4' />
+            </button>
+            <button
+                onClick={() => editor.chain().focus().toggleHeading({level: 5}).run()}
+                className={editor.isActive('heading', {level: 5}) ? 'is-active' : ''}
+            >
+                <i className='ri-h-5' />
+            </button>
+            <button
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
                 className={editor.isActive('bulletList') ? 'is-active' : ''}
             >

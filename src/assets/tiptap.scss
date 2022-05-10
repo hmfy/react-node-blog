@@ -2,6 +2,13 @@
     outline: none;
     min-height: 300px;
     font-size: 16px;
+
+    &[contenteditable="false"] { // 代码块语言选择开/关
+        .select-language {
+            display: none !important;
+        }
+    }
+
     > * + * {
         margin-top: 0.75em;
     }

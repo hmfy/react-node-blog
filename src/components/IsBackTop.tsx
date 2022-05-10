@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {getDisplay, scrollAnimation} from "tools/tools"
 import Fire from "comps/Fire";
 import "assets/fire.scss"
@@ -14,8 +14,8 @@ const root = document.getElementById("root")
 function IsBackTop({ elem = root, domType = 'element', visibleHeight = 400 }: Props) {
     const [animate, setAnimate] = useState('is-back-top');
     const [show, setShow] = useState(false);
-    const getElem = () => domType === 'element' ? elem : elem.el
     const resetAnimation = () => setAnimate('is-back-top')
+    const getElem = useCallback(() => domType === 'element' ? elem : elem.el, [domType, elem])
     useEffect(() => {
         if (elem) {
             const dom = getElem()

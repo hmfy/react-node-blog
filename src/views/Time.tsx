@@ -4,8 +4,10 @@ import FEmpty from "comps/FEmpty";
 import useRequest from "hooks/useRequest";
 import {Card, Col, Row, Timeline} from "antd";
 import IsBackTop from "comps/IsBackTop";
-import moment from "moment";
+import moment from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime'
 import {parseHTML} from "tools/tools";
+moment.extend(relativeTime)
 
 type ListItem = {
     id: number

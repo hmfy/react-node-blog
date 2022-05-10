@@ -1,13 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Comment, Form, Input, Button, List, Col, Row } from 'antd';
-import moment from 'moment';
-import useScrollLoad from "hooks/useScrollLoad";
+import moment from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime'
 import FLoading from "comps/FLoading";
-import FEmpty from "comps/FEmpty";
-import InfiniteScroll from "react-infinite-scroll-component";
 import IsBackTop from "comps/IsBackTop";
-import {request} from "hooks/useRequest";
+import useRequest, {request} from "hooks/useRequest";
 const {TextArea} = Input
+moment.extend(relativeTime)
 
 type Event = {
     target: {
@@ -22,6 +21,7 @@ type ListItem = {
     createTime: number
 }
 
+// eslint-disable-next-line
 type List = Array<ListItem>
 
 type AddComment = (obj:ListItem) => void
@@ -102,7 +102,7 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
         if (!commentVal) return
         setBtnLoading(true)
         const { data: { list }  } = await request<Array<{ ID: number }>>({
-            url: '/execute',
+            url: '/execute2',
             data: {
                 path: 'comment.add',
                 content: commentVal,
@@ -145,13 +145,13 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
 
 // 主入口
 function IsComment() {
-    const {
-        list, empty, loading, bodyHeight, fetchData, hasMore
-    } = useScrollLoad<List>({
+    const [ params ] = useState({
         data: {
             path: 'comment.list'
         }
     })
+    const { resData, loading } = useRequest(params)
+    const list:List = resData.list
     const reactElem = useRef(null)
     const [comment, setComment] = useState(list);
     const submitComment = (obj:ListItem) => setComment([obj, ...comment])
@@ -161,18 +161,7 @@ function IsComment() {
             <Col xs={{ span: 22 }} lg={{ span: 20 }} xxl={{ span: 12 }} >
                 <Editor commentRefresh={submitComment} commentLength={list.length + comment.length} />
                 <FLoading show={loading} />
-                <InfiniteScroll
-                    ref={reactElem}
-                    style={{ padding: "10px", boxSizing: "border-box" }}
-                    height={ bodyHeight }
-                    dataLength={ list.length }
-                    next={ fetchData }
-                    hasMore={ hasMore }
-                    loader={<span> </span>}
-                >
-                    <MyList data={ comment.concat(list) } />
-                </InfiniteScroll>
-                <FEmpty show={empty}/>
+                <MyList data={ comment.concat(list) } />
                 <IsBackTop elem={ reactElem.current } domType={ 'reactElem' } />
             </Col>
             <Col xs={{ span: 1 }} lg={{ span: 2 }} xxl={{ span: 6 }} />

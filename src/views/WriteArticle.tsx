@@ -1,4 +1,4 @@
-import React, {ChangeEventHandler, CSSProperties, SetStateAction, useState} from "react";
+import React, { CSSProperties, SetStateAction, useState} from "react";
 import {Button, Col, Input, message, Radio, Row, Select, Spin} from "antd";
 import {HomeOutlined} from "@ant-design/icons";
 import Tiptap from "comps/Tiptap";
@@ -78,14 +78,16 @@ function WriteArticle() {
                     },
                 })
             }
-            setSpinning(false)
             await message.success({
+                duration: 1,
                 content: '发布成功！',
                 style: {
                     marginTop: '20vh',
                 },
             })
-            return editor?.commands.clearContent()
+            setSpinning(false)
+            editor?.commands.clearContent()
+            return setTitle('')
         }
         return message.info({
             content: '内容为空！',

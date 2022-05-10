@@ -5,8 +5,9 @@ import useRequest from "hooks/useRequest";
 import {useNavigate} from "react-router-dom";
 import {parseHTML} from "tools/tools";
 
+// eslint-disable-next-line
 export type ListItem = { title: string, content: string, id: number }
-
+// eslint-disable-next-line
 export type List = Array<ListItem>
 
 export type ListParams = {
@@ -14,7 +15,7 @@ export type ListParams = {
     style?: CSSProperties
     title: string
 }
-
+// eslint-disable-next-line
 function ListItem({title, id}: ListItem) {
     const navigate = useNavigate()
     const itemStyle: CSSProperties = {

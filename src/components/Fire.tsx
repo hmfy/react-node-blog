@@ -7,7 +7,7 @@ function Fire({size = 30}: { size?: number }) {
         if (root) {
             root.style.setProperty('--rocket-size', size + 'px')
         }
-    }, [])
+    }, [size])
     return (<div className="wrapper">
         <div className="rocket">
             <div className="body side left"/>

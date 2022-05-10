@@ -5,7 +5,7 @@ import lowlight from 'lowlight'
 import React, {Dispatch, SetStateAction, useEffect} from "react";
 import "assets/tiptap.scss"
 import CodeBlockComponent from "comps/CodeBlockComponent";
-import TiptapBtn from "./TiptapBtn"
+import BulletList from '@tiptap/extension-bullet-list'
 
 type Props = { initialValue?: string, setEditor?: Dispatch<SetStateAction<Editor | null>>, editable?: boolean }
 
@@ -32,6 +32,13 @@ function Tiptap({ initialValue = '', setEditor = () => {}, editable = true }: Pr
               strike: Partial<StrikeOptions> | false,
               text: false,
             * */
+            BulletList.extend({
+                addKeyboardShortcuts() {
+                    return {
+                        'Tab': () => this.editor.commands.insertContent('\t')
+                    }
+                },
+            }),
             Starterkit.configure({
                 codeBlock: false
             }),
@@ -39,7 +46,7 @@ function Tiptap({ initialValue = '', setEditor = () => {}, editable = true }: Pr
                 .extend({
                     addNodeView() {
                         return ReactNodeViewRenderer(CodeBlockComponent)
-                    },
+                    }
                 })
                 .configure({
                     lowlight
@@ -54,7 +61,7 @@ function Tiptap({ initialValue = '', setEditor = () => {}, editable = true }: Pr
     }, [ initialValue ])
     useEffect(() => {
         setEditor(editor)
-    }, [editor])
+    }, [editor, setEditor])
     return <EditorContent editor={editor} />
 }
 

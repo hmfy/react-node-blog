@@ -28,7 +28,7 @@ function useScrollLoad(requestParams: Props) {
         },
     })
     const {loading, setLoading, empty, resData} = useRequest(params)
-    const [hasMore, setHasMore] = useState(false)
+    const [hasMore] = useState(false)
     const bodyHeight = document.body.clientHeight
     const fetchData = () => {
         setLoading(true)
@@ -42,11 +42,8 @@ function useScrollLoad(requestParams: Props) {
     }
     useEffect(() => {
         setList(list.concat(resData.list))
+        // eslint-disable-next-line
     }, [resData.pageNo])
-    useEffect(() => {
-        setHasMore(list.length < (resData as {total:number}).total)
-    }, [ list ])
-
     return {
         bodyHeight,
         hasMore,

@@ -27,7 +27,7 @@ function LanguageSelect(props: Props) {
         }, updateAttributes, extension
     } = props
     const languageList = extension.options.lowlight.listLanguages()
-    return (<div style={{ textAlign: 'right', marginBottom: 10 }}>
+    return (<div className='select-language' style={{ textAlign: 'right', marginBottom: 10 }}>
         <select style={{
             outline: "1px solid #767676cc",
             borderRadius: 4,
@@ -54,11 +54,15 @@ function LanguageSelect(props: Props) {
     </div>)
 }
 
-export default (props: Props) => (
-    <NodeViewWrapper>
+function CodeBlockComponent (props: Props) {
+    return (
+        <NodeViewWrapper>
         <pre>
-            {/*<LanguageSelect {...props} />*/}
+            <LanguageSelect {...props} />
             <NodeViewContent as="code"/>
         </pre>
-    </NodeViewWrapper>
-)
+        </NodeViewWrapper>
+    )
+}
+
+export default CodeBlockComponent

@@ -5,6 +5,7 @@ const path = require('path');
 const webpack = require('webpack');
 const resolve = require('resolve');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AntdDayjsWebpackPlugin = require('antd-dayjs-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -193,11 +194,7 @@ module.exports = function (webpackEnv) {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
     bail: isEnvProduction,
-    devtool: isEnvProduction
-      ? shouldUseSourceMap
-        ? 'source-map'
-        : false
-      : isEnvDevelopment && 'cheap-module-source-map',
+    devtool: isEnvProduction ? false: isEnvDevelopment && 'cheap-module-source-map',
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: paths.appIndexJs,
@@ -659,15 +656,18 @@ module.exports = function (webpackEnv) {
           };
         },
       }),
+      new AntdDayjsWebpackPlugin({
+        preset: 'antdv3'
+      }),
       // Moment.js is an extremely popular library that bundles large locale files
       // by default due to how webpack interprets its code. This is a practical
       // solution that requires the user to opt into importing specific locales.
       // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
       // You can remove this if you don't use Moment.js:
-      new webpack.IgnorePlugin({
+     /* new webpack.IgnorePlugin({
         resourceRegExp: /^\.\/locale$/,
         contextRegExp: /moment$/,
-      }),
+      }),*/
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the webpack build.
       isEnvProduction &&

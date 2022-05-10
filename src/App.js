@@ -1,9 +1,13 @@
-import '../node_modules/antd/dist/antd.css';
 import 'assets/App.css';
 import 'assets/media.scss';
 import React from "react"
 import AppLayout from 'views/Layout'
-import 'tools/moment_zhcn'
+import 'dayjs/locale/zh-cn'
+import moment from "dayjs";
+import {setAddress} from "tools/tools";
+moment.locale('zh-cn')
+
+setAddress()
 
 function App() {
 	return <AppLayout />
