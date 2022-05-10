@@ -1,13 +1,21 @@
 import {Editor, EditorContent, ReactNodeViewRenderer, useEditor} from "@tiptap/react"
 import Starterkit from "@tiptap/starter-kit"
+import { Extension } from "@tiptap/core"
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import lowlight from 'lowlight'
 import React, {Dispatch, SetStateAction, useEffect} from "react";
 import "assets/tiptap.scss"
 import CodeBlockComponent from "comps/CodeBlockComponent";
-import BulletList from '@tiptap/extension-bullet-list'
 
 type Props = { initialValue?: string, setEditor?: Dispatch<SetStateAction<Editor | null>>, editable?: boolean }
+
+const Ident = Extension.create({
+    addKeyboardShortcuts() {
+        return {
+            'Tab': () => this.editor.commands.insertContent('\t')
+        }
+    }
+})
 
 function Tiptap({ initialValue = '', setEditor = () => {}, editable = true }: Props) {
     const editor = useEditor({
@@ -32,13 +40,7 @@ function Tiptap({ initialValue = '', setEditor = () => {}, editable = true }: Pr
               strike: Partial<StrikeOptions> | false,
               text: false,
             * */
-            BulletList.extend({
-                addKeyboardShortcuts() {
-                    return {
-                        'Tab': () => this.editor.commands.insertContent('\t')
-                    }
-                },
-            }),
+            Ident,
             Starterkit.configure({
                 codeBlock: false
             }),
@@ -58,6 +60,7 @@ function Tiptap({ initialValue = '', setEditor = () => {}, editable = true }: Pr
     })
     useEffect(() => {
         editor?.commands.setContent(initialValue)
+        // eslint-disable-next-line
     }, [ initialValue ])
     useEffect(() => {
         setEditor(editor)

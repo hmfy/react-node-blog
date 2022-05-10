@@ -24,6 +24,18 @@ function Home () {
 					}}>
 						<NewArticle />
 						<HotArticle />
+						<div style={{
+							marginTop: 20
+						}}>
+							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "#a8a8a8" }}>
+								鄂ICP备19010491号
+							</a>
+						</div>
+						<div>
+							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "#a8a8a8" }}>
+								鄂公网安备 42112302000086号
+							</a>
+						</div>
 					</Sider>
 				</Col>
 			</Row>

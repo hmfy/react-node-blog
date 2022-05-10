@@ -54,6 +54,7 @@ export function getDeviceIsPhone () {
     return /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
 }
 
+// 设置用户城市
 export function setAddress (articleID: number|null = null) {
     const instance = getInstance()
     instance.request({
@@ -63,8 +64,10 @@ export function setAddress (articleID: number|null = null) {
             path: 'log.ip2address'
         }
     }).then(async (res:any) => {
-        const { expires } = res.data
-        if (!expires) return
+        const { expires, info } = res.data
+        if (!expires) {
+            return localStorage.setItem('user_address', info.address)
+        }
         // 过很长一段时间, 则再记录一次
         await instance.request({
             url: '/noParse2',
@@ -74,4 +77,9 @@ export function setAddress (articleID: number|null = null) {
             }
         })
     })
+}
+
+// 获取用户城市
+export function getAddress () {
+    return localStorage.getItem('user_address')
 }

@@ -63,10 +63,10 @@ export async function request({url = defaultAPI, ...resetParams}: Params): Promi
                         centered: true,
                         content: '当前页面需要登陆才能继续访问',
                         onOk () {
-                            window.location.href =  window.location.origin + '/login?' + window.location.pathname
+                            window.location.href =  window.location.origin + '/blog/login?' + window.location.pathname.split('/blog')[1]
                         },
                         onCancel () {
-                            window.location.href =  window.location.origin + '/'
+                            window.location.href =  window.location.origin + '/blog'
                         }
                     })
                 }

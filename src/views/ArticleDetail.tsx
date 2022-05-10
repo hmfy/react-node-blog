@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import {Navigate, useLocation} from "react-router-dom";
 import useRequest from "hooks/useRequest";
 import {Col, message, Row} from "antd";
@@ -36,9 +36,7 @@ type Article = Array<{
 }>
 
 function Detail(props: { articleID: number }) {
-    useEffect(() => {
-        setAddress(props.articleID)
-    }, [])
+    setAddress(props.articleID)
     const [params, setParams] = useState({
         data: {
             path: "article.detail",
@@ -94,7 +92,7 @@ function Detail(props: { articleID: number }) {
         <Col xs={{span: 1}} lg={{span: 2}} xxl={{span: 6}}/>
         <Col xs={{span: 22}} lg={{span: 20}} xxl={{span: 12}}>
             <FLoading show={loading}/>
-            <div style={{ fontSize: "16px" }}>
+            <div style={{ fontSize: "16px", paddingBottom: 20 }}>
                 <div style={titleStyle}>{title}</div>
                 <Tiptap initialValue={content} editable={ false } />
                 <div style={footerStyle}>

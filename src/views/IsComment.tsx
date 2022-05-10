@@ -1,10 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useRef, useState} from 'react';
 import {Comment, Form, Input, Button, List, Col, Row } from 'antd';
 import moment from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime'
 import FLoading from "comps/FLoading";
 import IsBackTop from "comps/IsBackTop";
 import useRequest, {request} from "hooks/useRequest";
+import {getAddress} from "tools/tools";
 const {TextArea} = Input
 moment.extend(relativeTime)
 
@@ -32,14 +33,6 @@ type EditAreaProps = {
     btnLoading: boolean
     commentVal: string
     commentLength: number
-}
-
-function getAddress () {
-    return {
-        then (func: Function):void {
-            func('')
-        }
-    }
 }
 
 // 包裹
@@ -96,7 +89,6 @@ const EditorArea = ( props:EditAreaProps ) => {
 const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, commentLength: number }) => {
     const [btnLoading, setBtnLoading] = useState(false)
     const [commentVal, setCommentVal] = useState('')
-    const [name, setName] = useState('')
     const handleChange = (e: Event) => setCommentVal(e.target.value)
     const handleSubmit = async () => {
         if (!commentVal) return
@@ -112,7 +104,7 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
         })
 
         commentRefresh({
-            author: name + '网友',
+            author: getAddress() || '',
             content: commentVal,
             id: list[0].ID,
             createTime: Date.now(),
@@ -120,9 +112,6 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
         setBtnLoading(false)
         setCommentVal('')
     }
-    useEffect(() => {
-        getAddress().then((res:string) => setName(res))
-    }, [])
     const areaProps = {
         commentVal,
         handleChange,

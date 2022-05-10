@@ -1,9 +1,8 @@
 import {getDisplay} from "tools/tools"
 import React, {CSSProperties} from "react";
 import {Layout} from "antd";
-import PageFooter from "views/PageFooter";
 import Menu from "views/Menu";
-import {Route, Routes, useLocation} from "react-router-dom";
+import {Route, Routes, useLocation, Navigate} from "react-router-dom";
 import Home from "views/Home";
 import ImgZip from "views/ImgZip";
 import ArticleList from "views/ArticleList";
@@ -13,7 +12,7 @@ import IsComment from "views/IsComment";
 import ArticleDetail from "views/ArticleDetail";
 import Login from "views/Login";
 
-const {Header, Footer, Content} = Layout;
+const {Header, Content} = Layout;
 
 function AppLayout() {
 
@@ -32,10 +31,10 @@ function AppLayout() {
                 <Menu/>
             </Header>
             <Content style={{
-                width: "100%",
-                marginBottom: "50px"
+                width: "100%"
             }}>
                 <Routes>
+                    <Route path="*" element={<Navigate to="/" />} />
                     <Route path="/" element={
                         <Home/>
                     }/>
@@ -62,9 +61,6 @@ function AppLayout() {
                     }/>
                 </Routes>
             </Content>
-            <Footer>
-                <PageFooter/>
-            </Footer>
         </Layout>
     )
 }

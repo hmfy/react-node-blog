@@ -1,4 +1,4 @@
-import {Form, Input, Button} from 'antd';
+import {Form, Input, Button, message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import React, {CSSProperties} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
@@ -21,7 +21,8 @@ function Login() {
         if (token) {
             localStorage.setItem('token', token)
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-            setTimeout(() => navigate(search.split('?')[1]))
+            await message.success('登陆成功！')
+            navigate(search.split('?')[1] || '/')
         }
     };
 
