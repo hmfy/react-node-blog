@@ -39,7 +39,7 @@ function ItemCard({title, content}: ListItem): ReactElement {
         <p style={titleStyle}>
             {title}
         </p>
-        <div className={'overflow-dot'}>
+        <div>
             { parseHTML(content) }
         </div>
     </Card>)
@@ -61,7 +61,7 @@ function Time() {
                     <FLoading show={loading}/>
                     {
                         list.map((timeItem, index) => (
-                            <Timeline.Item key={index} label={ moment(timeItem.createTime).fromNow() }>
+                            <Timeline.Item key={index} label={ moment(timeItem.createTime).format("YYYY-MM-DD") }>
                                 <ItemCard {...timeItem} />
                             </Timeline.Item>
                         ))

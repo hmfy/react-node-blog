@@ -2,10 +2,12 @@ import React, { CSSProperties, SetStateAction, useState} from "react";
 import {Button, Col, Input, message, Radio, Row, Select, Spin} from "antd";
 import {HomeOutlined} from "@ant-design/icons";
 import Tiptap from "comps/Tiptap";
+import DatePicker from "comps/DatePicker";
 import useRequest, {request} from "hooks/useRequest";
 import {Editor} from "@tiptap/react";
 import TiptapBtn from "comps/TiptapBtn";
 import {useNavigate} from "react-router-dom";
+import moment from "dayjs";
 
 function ChooseTips({setTags}: { setTags: SetStateAction<any> }) {
     const [params] = useState({
@@ -30,6 +32,8 @@ function WriteArticle() {
     const [articleType, setArticleType] = useState(1)
     const [editor, setEditor] = useState<Editor | null>(null)
     const [title, setTitle] = useState('')
+    const [time, setTime] = useState(Date.now())
+    const changeTime = (date: any, dateString: any) => setTime(new Date(dateString).getTime())
     const headerStyle: CSSProperties = {
         position: "sticky",
         top: 0,
@@ -48,7 +52,7 @@ function WriteArticle() {
             }
         }
         if (content) {
-            if (!title) {
+            if (!title && ( articleType === 1 )) {
                 return message.info({
                     content: '标题为空！',
                     style: {
@@ -64,7 +68,7 @@ function WriteArticle() {
                     path: 'article.add',
                     content: content,
                     title: title,
-                    createTime: Date.now(),
+                    createTime: time,
                     address: null,
                     tags: tags.join(','),
                     type: articleType
@@ -124,6 +128,7 @@ function WriteArticle() {
                         <Radio.Button value={1} >文章</Radio.Button>
                         <Radio.Button value={2}>日志</Radio.Button>
                     </Radio.Group>
+                    <DatePicker onChange={ changeTime } defaultValue={ moment() } style={{marginLeft: 20}} />
                     <ChooseTips setTags={setTags}/>
                     <HomeOutlined className='hover-blue' style={{marginLeft: 20, fontSize: 20}}
                                   onClick={() => navigate('/')}/>

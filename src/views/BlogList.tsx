@@ -26,9 +26,9 @@ function Blog({title, content, createTime, id}: ListItem) {
     const titleStyle: CSSProperties = {fontWeight: "bold", fontSize: "16px", marginBottom: 10}
     const navigate = useNavigate()
     return (<Card style={cardStyle}>
-        <div style={titleStyle}>
+        <h1 style={titleStyle}>
             {title}
-        </div>
+        </h1>
         <div>
             <div className={'overflow-dot'} onClick={() => {
                 navigate('/detail', { state: { articleID: id }, replace: false })
