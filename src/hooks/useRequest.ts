@@ -56,17 +56,21 @@ export async function request({url = defaultAPI, ...resetParams}: Params): Promi
                     reject(error)
                 }
                 if (error.response.statusText === "Unauthorized") {
+                    const curPath = window.location.pathname.split('/blog')[1]
+                    const origin = window.location.origin
                     Modal.warning({
                         keyboard: false,
                         okText: "去登陆",
                         closable: true,
                         centered: true,
-                        content: '当前页面需要登陆才能继续访问',
+                        content: '当前功能需要登陆才能继续使用',
                         onOk () {
-                            window.location.href =  window.location.origin + '/blog/login?' + window.location.pathname.split('/blog')[1]
+                            window.location.href =  origin + '/blog/login?' + curPath
                         },
                         onCancel () {
-                            window.location.href =  window.location.origin + '/blog'
+                            if (['/write'].includes(curPath)) {
+                                window.location.href =  origin + '/blog'
+                            }
                         }
                     })
                 }
@@ -79,24 +83,30 @@ function useRequest(arg: Params): {
     empty: boolean,
     loading: boolean,
     setEmpty: (b: boolean) => any,
-    setLoading: (b: boolean) => any
+    setLoading: (b: boolean) => any,
+    refresh: () => void
 }
 function useRequest(arg: Params) {
     const [resData, setResData] = useState<ResData>({list: [], err: null})
     const [empty, setEmpty] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [refreshControl, setControl] = useState(false)
+    const refresh = () => {
+        setControl(!refreshControl)
+    }
     useEffect(() => {
         request(arg).then(({data}) => {
             setResData(data)
             if (!data.list.length) setEmpty(true)
             setLoading(false)
         }).catch(e => console.log(e))
-    }, [arg])
+    }, [arg, refreshControl])
     return {
         resData,
         empty,
         loading,
         setEmpty,
-        setLoading
+        setLoading,
+        refresh
     }
 }

@@ -1,4 +1,4 @@
-import React, { CSSProperties, SetStateAction, useState} from "react";
+import React, {CSSProperties, SetStateAction, useEffect, useState} from "react";
 import {Button, Col, Input, message, Radio, Row, Select, Spin} from "antd";
 import {HomeOutlined} from "@ant-design/icons";
 import Tiptap from "comps/Tiptap";
@@ -6,7 +6,7 @@ import DatePicker from "comps/DatePicker";
 import useRequest, {request} from "hooks/useRequest";
 import {Editor} from "@tiptap/react";
 import TiptapBtn from "comps/TiptapBtn";
-import {useNavigate} from "react-router-dom";
+import {Navigate, useLocation, useNavigate} from "react-router-dom";
 import moment from "dayjs";
 
 function ChooseTips({setTags}: { setTags: SetStateAction<any> }) {
@@ -26,11 +26,52 @@ function ChooseTips({setTags}: { setTags: SetStateAction<any> }) {
     </Select>)
 }
 
+type Data = {
+    title:string,
+    content:string,
+    createTime:number,
+    type: number,
+    tag: string
+}
+
 function WriteArticle() {
+    const navigate = useNavigate()
+
+    // 获取编辑器实例
+    const [editor, setEditor] = useState<Editor | null>(null)
+
+    // 编辑模式
+    const {state} = useLocation()
+    let articleID = 0
+    const [ reqComplete, setReqComplete ] = useState(false)
+    if (state) ( {articleID} = (state as { articleID: number }) )
+    useEffect(() => {
+        if (!articleID) return
+        if (!editor) return
+        if (reqComplete) return
+        setSpinning(true)
+        request<Array<Data>>({
+            url: '/execute',
+            data: {
+                path: "article.detail",
+                ID: articleID
+            }
+        }).then(res => {
+            if (res.data.list.length) {
+                setReqComplete(true)
+                setSpinning(false)
+                const { title, content, createTime, type, tag } = res.data.list[0]
+                setTitle(title)
+                editor?.commands.setContent(content)
+                setTime(createTime)
+                setArticleType(type)
+            }
+        })
+    }, [editor])
+
     const [spinning, setSpinning] = useState(false)
     const [tags, setTags] = useState([])
     const [articleType, setArticleType] = useState(1)
-    const [editor, setEditor] = useState<Editor | null>(null)
     const [title, setTitle] = useState('')
     const [time, setTime] = useState(Date.now())
     const changeTime = (date: any, dateString: any) => setTime(new Date(dateString).getTime())
@@ -71,7 +112,8 @@ function WriteArticle() {
                     createTime: time,
                     address: null,
                     tags: tags.join(','),
-                    type: articleType
+                    type: articleType,
+                    articleID: articleID
                 }
             })
             if (data.err) {
@@ -90,6 +132,9 @@ function WriteArticle() {
                 },
             })
             setSpinning(false)
+
+            if (articleID) navigate('/')
+
             editor?.commands.clearContent()
             return setTitle('')
         }
@@ -101,22 +146,20 @@ function WriteArticle() {
         })
     }
 
-    const navigate = useNavigate()
-
     return (
         <Row style={{padding: "0 10px"}}>
             <Col xs={{span: 0}} lg={{span: 2}} xxl={{span: 6}}/>
             <Col xs={{span: 24}} lg={{span: 20}} xxl={{span: 12}} style={{minHeight: "70vh", position: "relative"}}>
-                <Spin style={{position: "absolute", top: "20%", left: "50%"}} spinning={spinning}/>
+                <Spin style={{position: "absolute", top: "20vh", left: "50%"}} spinning={spinning}/>
                 <div style={headerStyle}>
                     <div style={{display: "flex", justifyContent: "space-between" }}>
-                        <Input style={{width: 300, fontSize: "26px", fontWeight: "bold"}} placeholder="请输入标题"
+                        <Input style={{flex: 1, fontSize: "26px", fontWeight: "bold"}} placeholder="请输入标题"
                                value={title}
                                onChange={e => setTitle(e.target.value)}
                                bordered={false}/>
                         <div>
                             <div style={{textAlign: "right", marginTop: 10}}>
-                                <Button style={{marginRight: 20}} type="primary" onClick={submitArticle}>发布</Button>
+                                <Button type="primary" onClick={submitArticle}>发布</Button>
                             </div>
                         </div>
                     </div>
@@ -128,7 +171,7 @@ function WriteArticle() {
                         <Radio.Button value={1} >文章</Radio.Button>
                         <Radio.Button value={2}>日志</Radio.Button>
                     </Radio.Group>
-                    <DatePicker onChange={ changeTime } defaultValue={ moment() } style={{marginLeft: 20}} />
+                    <DatePicker onChange={ changeTime } value={ moment(time) } style={{marginLeft: 20}} />
                     <ChooseTips setTags={setTags}/>
                     <HomeOutlined className='hover-blue' style={{marginLeft: 20, fontSize: 20}}
                                   onClick={() => navigate('/')}/>

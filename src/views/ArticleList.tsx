@@ -1,19 +1,19 @@
 import React, {CSSProperties, useState} from "react";
-import useRequest from "hooks/useRequest";
+import useRequest, {request} from "hooks/useRequest";
 import FLoading from "comps/FLoading";
 import FEmpty from "comps/FEmpty";
-import {Col, Pagination, Row} from "antd";
+import {Col, message, Pagination, Row} from "antd";
 import {
-    // DeleteOutlined, EditOutlined
+    DeleteOutlined, EditOutlined,
     ReadOutlined} from '@ant-design/icons';
 import {useNavigate} from "react-router-dom";
-import {parseHTML} from "tools/tools";
+import {getLogin, parseHTML} from "tools/tools";
 
-type ListItem = { content: string, id: number }
+type ListItem = { content: string, id: number, refresh?: () => void }
 
 type List = Array<ListItem>
 
-const ArticleItem = ({content, id}: ListItem) => {
+const ArticleItem = ({content, id, refresh = () => {} }: ListItem ) => {
     const wrapperStyle: CSSProperties = {
         display: "flex",
         justifyContent: "space-between",
@@ -37,6 +37,20 @@ const ArticleItem = ({content, id}: ListItem) => {
     }
 
     const navigate = useNavigate()
+    const delArticle = async () => {
+        await request({
+            url: "/execute",
+            data: {
+                path: 'article.delArticle',
+                articleID: id
+            }
+        })
+        refresh()
+        await message.success('删除成功！')
+    }
+    const editArticle = () => {
+        navigate('/write', { state: { articleID: id }, replace: false })
+    }
     return (<div className='hover-blue fxs-height-30'
                  style={wrapperStyle}>
         <div style={contentStyle}>
@@ -46,8 +60,8 @@ const ArticleItem = ({content, id}: ListItem) => {
             <ReadOutlined onClick={() => {
                 navigate('/detail', { state: { articleID: id }, replace: false })
             }} />
-            {/*<EditOutlined style={{marginLeft: 20}}/>*/}
-            {/*<DeleteOutlined style={{marginLeft: 20}}/>*/}
+            { getLogin() ? <EditOutlined style={{marginLeft: 20}} onClick={ editArticle } /> : null }
+            { getLogin() ? <DeleteOutlined style={{marginLeft: 20}} onClick={ delArticle } /> : null }
         </div>
     </div>)
 }
@@ -60,10 +74,11 @@ function ArticleList() {
         data: {
             path: 'article.list',
             pageSize: pageSize,
-            pageNo: currentPage
+            pageNo: currentPage,
+            isAll: true
         }
     })
-    let {empty, loading, resData, setLoading} = useRequest(params)
+    let {empty, loading, resData, setLoading, refresh} = useRequest(params)
     const list: List = resData.list
     const handleChange = (page:number, pageSize:number) => {
         setLoading(true)
@@ -85,7 +100,7 @@ function ArticleList() {
                 <div style={{minHeight: 500}} className='fxs-min-height-300'>
                     <FLoading show={loading}/>
                     {
-                        list.map((ele, index) => <ArticleItem key={index} {...ele} />)
+                        list.map((ele, index) => <ArticleItem key={index} {...ele} refresh={refresh} />)
                     }
                     <FEmpty show={empty}/>
                 </div>

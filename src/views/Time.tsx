@@ -7,6 +7,8 @@ import IsBackTop from "comps/IsBackTop";
 import moment from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime'
 import {parseHTML} from "tools/tools";
+import { EditOutlined } from '@ant-design/icons';
+import {useNavigate} from "react-router-dom";
 moment.extend(relativeTime)
 
 type ListItem = {
@@ -18,7 +20,7 @@ type ListItem = {
 }
 type List = Array<ListItem>
 
-function ItemCard({title, content}: ListItem): ReactElement {
+function ItemCard({title, content, id}: ListItem): ReactElement {
     const cardStyle: CSSProperties = {
         width: "100%",
         display: "inline-block",
@@ -33,13 +35,17 @@ function ItemCard({title, content}: ListItem): ReactElement {
         textOverflow: "ellipsis",
         marginBottom: 5
     }
+    const navigate = useNavigate()
     return (<Card style={cardStyle}
                   bodyStyle={{padding: 15}}
                   className={'card-box-shadow'}>
         <p style={titleStyle}>
             {title}
         </p>
-        <div>
+        <div style={{ position: "relative" }}>
+            <EditOutlined  onClick={() => {
+                navigate('/write', { state: { articleID: id }, replace: false })
+            }} style={{ position: "absolute", right: -10, top: -10, cursor: "pointer" }} />
             { parseHTML(content) }
         </div>
     </Card>)

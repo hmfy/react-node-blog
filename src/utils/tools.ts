@@ -83,3 +83,8 @@ export function setAddress (articleID: number|null = null) {
 export function getAddress () {
     return localStorage.getItem('user_address')
 }
+
+// 获取当前用户登录状态
+export function getLogin () {
+    return localStorage.getItem('token')
+}
