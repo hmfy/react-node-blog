@@ -88,3 +88,52 @@ export function getAddress () {
 export function getLogin () {
     return localStorage.getItem('token')
 }
+
+export function uploadFile (fileList:Array<File>):Promise<{data: {list:[]}}> {
+    // 上传文件
+    return new Promise(resolve => {
+        const formData = new FormData()
+        Array.from(fileList).forEach(file => formData.append(`files`, file))
+        getInstance().request({
+            url: "/file/upload",
+            headers: {
+                "Content-Type": "multipart/form-data;"
+            },
+            data: formData
+        }).then(resolve)
+    })
+}
+
+export function dataURLtoFile(dataurl:string, name:string):File {//base64转file
+    let arr:any = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        buffer = atob(arr[1]),
+        n = buffer.length,
+        u8arr = new Uint8Array(n)
+    while (n--) {
+        u8arr[n] = buffer.charCodeAt(n)
+    }
+    return new File([u8arr], name, {
+        type: mime,
+    })
+}
+
+export function chooseFile():Promise<FileList> {
+    return new Promise(resolve => {
+        const inputObj = document.createElement('input')
+        inputObj.setAttribute('type','file')
+        inputObj.onchange = (e:any) => resolve(e.target.files as FileList)
+        inputObj.click()
+    })
+}
+
+export function file2Base (file:File):Promise<string> {
+    const fr = new FileReader()
+    fr.readAsDataURL(file)
+    return new Promise(resolve => {
+        fr.onload = () => {
+            resolve(fr.result as string)
+        }
+    })
+}
+

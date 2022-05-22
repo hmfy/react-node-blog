@@ -2,9 +2,11 @@ import {Editor} from "@tiptap/react"
 import React from "react"
 import "assets/icon.css"
 import "assets/tiptap-btn.scss"
+import {chooseFile, file2Base} from "tools/tools";
 
 function TiptapBtn({editor}: { editor: Editor | null }) {
     if (!editor) return null
+
     return (
         <div className='btn-list fxs-flex-wrap'>
             <button
@@ -71,6 +73,15 @@ function TiptapBtn({editor}: { editor: Editor | null }) {
                 onClick={() => editor.chain().focus().toggleCodeBlock().run()}
                 className={editor.isActive('codeBlock') ? 'is-active' : ''}
             >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="19" height="19">
+                    <path fill="none" d="M0 0h24v24H0z"/>
+                    <path d="M3 3h18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v14h16V5H4zm8 10h6v2h-6v-2zm-3.333-3L5.838 9.172l1.415-1.415L11.495 12l-4.242 4.243-1.415-1.415L8.667 12z" fill="#000"/>
+                </svg>
+            </button>
+            <button
+                onClick={() => editor.chain().focus().toggleCode().run()}
+                className={editor.isActive('code') ? 'is-active' : ''}
+            >
                 <i className='ri-code' />
             </button>
             <button
@@ -88,20 +99,25 @@ function TiptapBtn({editor}: { editor: Editor | null }) {
             <button onClick={() => editor.chain().focus().redo().run()}>
                 <i className='ri-redo' />
             </button>
-            <button>
+            <button onClick={() => {
+                chooseFile().then(async fileList => {
+                    const base64 = await file2Base(fileList[0])
+                    editor.chain().focus().setImage({ src: base64 }).run()
+                })
+            }}>
                 <i className='ri-image' />
+            </button>
+            <button onClick={() => editor.chain().focus().setTextAlign('left').run()}>
+                <i className='ri-align-left' />
+            </button>
+            <button onClick={() => editor.chain().focus().setTextAlign('center').run()}>
+                <i className='ri-align-center' />
+            </button>
+            <button onClick={() => editor.chain().focus().setTextAlign('right').run()}>
+                <i className='ri-align-right' />
             </button>
             <button>
                 <i className='ri-link' />
-            </button>
-            <button>
-                <i className='ri-align-left' />
-            </button>
-            <button>
-                <i className='ri-align-left' />
-            </button>
-            <button>
-                <i className='ri-align-right' />
             </button>
             <button>
                 <i className='ri-underline' />

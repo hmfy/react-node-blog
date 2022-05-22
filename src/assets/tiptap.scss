@@ -2,10 +2,14 @@
     outline: none;
     min-height: 300px;
     font-size: 16px;
-
-    &[contenteditable="false"] { // 代码块语言选择开/关
-        .select-language {
-            display: none !important;
+    padding: 10px;
+    //caret-color: #68cef8;
+    .ProseMirror-gapcursor {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        &:after {
+            color: #68cef8 !important;
+            border-top: 3px solid !important;
         }
     }
 
@@ -33,18 +37,25 @@
         line-height: 1.1;
     }
 
-    pre {
+    code {
+        tab-size: 2;
         background: #282c34;
         color: #abb2bf;
-        font-family: 'JetBrainsMono', monospace;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
 
+    pre {
+        tab-size: 2;
+        background: #282c34;
+        color: #abb2bf;
+        padding: 0.75em 1em;
+        border-radius: 5px;
         code {
             color: inherit;
             padding: 0;
             background: none;
-            font-size: 0.8rem;
+            border-radius: 0;
         }
     }
 
@@ -60,5 +71,30 @@
     blockquote {
         padding-left: 1rem;
         border-left: 2px solid rgba(#0D0D0D, 0.1);
+    }
+
+    .ProseMirror-selectednode {
+        outline: 3px solid #68cef8;
+    }
+
+    .img-control {
+        position: relative;
+        .smaller {
+            position: absolute;
+            right: -30px;
+            top: 0;
+            bottom: 0;
+            width: 90px;
+            cursor: ew-resize;
+        }
+    }
+}
+
+.ProseMirror[contenteditable="false"] { // 代码块语言选择开/关
+    .select-language {
+        display: none !important;
+    }
+    .ProseMirror-selectednode {
+        outline: none;
     }
 }

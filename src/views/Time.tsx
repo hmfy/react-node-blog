@@ -6,7 +6,7 @@ import {Card, Col, Row, Timeline} from "antd";
 import IsBackTop from "comps/IsBackTop";
 import moment from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime'
-import {parseHTML} from "tools/tools";
+import {getLogin, parseHTML} from "tools/tools";
 import { EditOutlined } from '@ant-design/icons';
 import {useNavigate} from "react-router-dom";
 moment.extend(relativeTime)
@@ -43,9 +43,11 @@ function ItemCard({title, content, id}: ListItem): ReactElement {
             {title}
         </p>
         <div style={{ position: "relative" }}>
-            <EditOutlined  onClick={() => {
-                navigate('/write', { state: { articleID: id }, replace: false })
-            }} style={{ position: "absolute", right: -10, top: -10, cursor: "pointer" }} />
+            {
+                getLogin() ? <EditOutlined onClick={() => {
+                    navigate('/write', { state: { articleID: id }, replace: false })
+                }} style={{ position: "absolute", right: -10, top: -10, cursor: "pointer" }} /> : null
+            }
             { parseHTML(content) }
         </div>
     </Card>)

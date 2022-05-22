@@ -6,8 +6,9 @@ import DatePicker from "comps/DatePicker";
 import useRequest, {request} from "hooks/useRequest";
 import {Editor} from "@tiptap/react";
 import TiptapBtn from "comps/TiptapBtn";
-import {Navigate, useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import moment from "dayjs";
+import {dataURLtoFile, uploadFile} from "tools/tools";
 
 function ChooseTips({setTags}: { setTags: SetStateAction<any> }) {
     const [params] = useState({
@@ -60,14 +61,14 @@ function WriteArticle() {
             if (res.data.list.length) {
                 setReqComplete(true)
                 setSpinning(false)
-                const { title, content, createTime, type, tag } = res.data.list[0]
+                const { title, content, createTime, type } = res.data.list[0]
                 setTitle(title)
                 editor?.commands.setContent(content)
                 setTime(createTime)
                 setArticleType(type)
             }
         })
-    }, [editor])
+    }, [editor, articleID, reqComplete])
 
     const [spinning, setSpinning] = useState(false)
     const [tags, setTags] = useState([])
@@ -80,6 +81,28 @@ function WriteArticle() {
         top: 0,
         zIndex: 1,
         background: "white"
+    }
+    const replaceSrc = async (wrapperDom:HTMLElement) => {
+        const waitUploadImgList = wrapperDom.getElementsByClassName('tip-img')
+        const fileList: File[] = []
+        const domList: any = []
+        Array.from(waitUploadImgList).forEach((ele:any) => {
+            if (!ele.src.includes('http')) {
+                // 上传
+                const file = dataURLtoFile(ele.src, 'pic.jpg')
+                fileList.push(file)
+                domList.push(ele)
+            }
+        })
+        if (fileList.length === 0) {
+            return
+        }
+        const res = await uploadFile(fileList)
+        res.data.list.forEach((file: { path: string }, index) => {
+            const location = window.location
+            const curDom = domList[index]
+            curDom['src'] = location.origin.replace(location.port, '80') + file.path
+        })
     }
     const submitArticle = async () => {
         let content = editor?.getHTML()
@@ -103,11 +126,15 @@ function WriteArticle() {
             }
 
             setSpinning(true)
+
+            // 处理 src
+            await replaceSrc(wrapper)
+
             let {data} = await request({
                 url: "execute",
                 data: {
                     path: 'article.add',
-                    content: content,
+                    content: wrapper.innerHTML,
                     title: title,
                     createTime: time,
                     address: null,
@@ -155,6 +182,7 @@ function WriteArticle() {
                     <div style={{display: "flex", justifyContent: "space-between" }}>
                         <Input style={{flex: 1, fontSize: "26px", fontWeight: "bold"}} placeholder="请输入标题"
                                value={title}
+                               maxLength={100}
                                onChange={e => setTitle(e.target.value)}
                                bordered={false}/>
                         <div>

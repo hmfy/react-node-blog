@@ -1,6 +1,7 @@
 .btn-list {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
+    flex-wrap: wrap;
     border-bottom: 1px solid #F5F5F5;
     padding: 5px;
     button {
