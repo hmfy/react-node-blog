@@ -51,31 +51,27 @@ const FyImage = Image.extend({
             ],
             [
                 'span',
-                mergeAttributes({ class: 'smaller', 'data-smaller': true })
+                mergeAttributes({ class: 'resize', 'data-resize': true })
             ],
             [
                 'span',
-                mergeAttributes({ class: 'bigger', 'data-bigger': true })
-            ],
-            [
-                'div',
-                { class: 'bg-shadow' }
+                mergeAttributes({ class: 'rotate', 'data-rotate': true })
             ]
         ]
     },
     onCreate2 () {
         (this.editor.view.dom as any).onmousedown = (e:any) => {
-            const smallerBtn = e.target.getAttribute('data-smaller')
+            const resizeBtn = e.target.getAttribute('data-resize')
             const biggerBtn = e.target.getAttribute('data-bigger')
             let timer:any = null
             let control = 2
-            if (smallerBtn) {
+            if (resizeBtn) {
                 control = -2
             }
             if (biggerBtn) {
                 control = 2
             }
-            if (smallerBtn || biggerBtn) {
+            if (resizeBtn || biggerBtn) {
                 if (control > 0) {
                     e.target.parentElement.style.width = 'auto'
                     e.target.parentElement.style.height = 'auto'
@@ -123,7 +119,7 @@ const FyImage = Image.extend({
         }
         ;(this.editor.view.dom as any).onmousedown = (e:any) => {
             const curElement = e.target
-            const isResize = curElement.getAttribute('data-smaller')
+            const isResize = curElement.getAttribute('data-resize')
             const removeListen = () => {
                 curElement.removeEventListener('mousemove', changeSize)
             }
