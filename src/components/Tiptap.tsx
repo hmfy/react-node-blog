@@ -11,6 +11,8 @@ import React, {Dispatch, SetStateAction, useEffect} from "react";
 import "assets/tiptap.scss"
 import CodeBlockComponent from "comps/CodeBlockComponent";
 import {file2Base} from "tools/tools";
+import Placeholder from "@tiptap/extension-placeholder";
+import Link from '@tiptap/extension-link'
 
 type Props = { initialValue?: string, setEditor?: Dispatch<SetStateAction<Editor | null>>, editable?: boolean }
 
@@ -166,10 +168,20 @@ const FyImage = Image.extend({
 function Tiptap({initialValue = '', setEditor = () => undefined, editable = true}: Props) {
     const editor = useEditor({
         extensions: [
+            TabIndent,
+            customCodeBlock,
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),
-            TabIndent,
+            Placeholder.configure({
+                placeholder: '写点什么吧......',
+                emptyEditorClass: 'is-editor-empty',
+                showOnlyWhenEditable: true
+            }),
+            Link.configure({
+                // openOnClick: false,
+                // linkOnPaste: false,
+            }),
             FyImage.configure({
                 allowBase64: true,
                 // inline: true,
@@ -181,8 +193,7 @@ function Tiptap({initialValue = '', setEditor = () => undefined, editable = true
             }),
             Starterkit.configure({
                 codeBlock: false
-            }),
-            customCodeBlock
+            })
         ],
         content: initialValue,
         autofocus: 'end',

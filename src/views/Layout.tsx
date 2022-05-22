@@ -20,9 +20,7 @@ function AppLayout() {
     const notNeedHeader = ['/zip', '/write', '/login']
 
     const sty: CSSProperties = {
-        display: getDisplay(!notNeedHeader.includes(pathname)),
-        color: "white",
-        marginBottom: "16px"
+        display: getDisplay(!notNeedHeader.includes(pathname))
     }
 
     return (

@@ -18,7 +18,7 @@ function MenuItem({ item }:ItemProps) {
 		navigate(path)
 	}
 	const chooseItem = () => path === pathname
-	const chooseTheme = 'black' // 选中菜单主题色
+	const chooseTheme = '#4F262B' // 选中菜单主题色
 	const curMenuItemStyle = chooseItem() ? ( // 被选中的菜单颜色
 		{
 			color: chooseTheme,
@@ -28,8 +28,7 @@ function MenuItem({ item }:ItemProps) {
 	const menuItemStyle = {
 		marginLeft: '25px',
 		cursor: 'pointer',
-		fontSize: "18px",
-		color: '#868686'
+		fontSize: "18px"
 	}
 
 	return (
@@ -84,8 +83,7 @@ function Menu() {
 	const inputStyle:CSSProperties = {
 		width: 300,
 		height: '30px',
-		transform: 'translateY(10px)',
-		borderBottom: '1px solid #ccc',
+		borderBottom: '1px solid #4F262B',
 		borderRadius: '0'
 	}
 

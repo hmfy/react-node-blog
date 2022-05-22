@@ -105,6 +105,7 @@ function ArticleList() {
                     <FEmpty show={empty}/>
                 </div>
                 <Pagination
+                    simple
                     defaultCurrent={ currentPage }
                     defaultPageSize={ pageSize }
                     current={ currentPage }

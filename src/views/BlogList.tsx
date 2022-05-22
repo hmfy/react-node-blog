@@ -22,7 +22,17 @@ type List = Array<ListItem>
 
 function Blog({title, content, createTime, id}: ListItem) {
     const buttonSpace: CSSProperties = {marginRight: "5px"}
-    const cardStyle: CSSProperties = {width: '100%', cursor: "pointer", border: "none", borderBottom: "2px solid #f0f0f0" }
+    const cardStyle: CSSProperties = {
+        width: '100%',
+        cursor: "pointer",
+        border: "none",
+        backgroundColor: "rgba(255, 255, 255, 0.2)",
+        marginBottom: 10,
+        borderRadius: "6px",
+        boxShadow: "rgb(0 0 0 / 12%) 0px 0px 4px, rgb(0 0 0 / 8%) 0px 2px 2px",
+        padding: "15px",
+        backdropFilter: "blur(5px)"
+    }
     const titleStyle: CSSProperties = {fontWeight: "bold", fontSize: "16px", marginBottom: 10}
     const navigate = useNavigate()
     return (<Card style={cardStyle}>

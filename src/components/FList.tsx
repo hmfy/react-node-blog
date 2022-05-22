@@ -24,6 +24,7 @@ function ListItem({title, id}: ListItem) {
         overflow: "hidden",
         display: "block",
         cursor: "pointer",
+        border: "none"
     }
     return (<List.Item style={itemStyle} className="hover-blue" onClick={() => {
         navigate('/detail', { state: { articleID: id }, replace: false })
@@ -51,7 +52,13 @@ function FList({path, title, style}: ListParams) {
             <FLoading show={loading}/>
             <List
                 className={"card-box-shadow"}
-                style={style}
+                style={{
+                    ...style,
+                    background: "rgba(255, 255, 255, 0.2)",
+                    borderRadius: "6px",
+                    boxShadow: "rgb(0 0 0 / 12%) 0px 0px 4px, rgb(0 0 0 / 8%) 0px 2px 2px",
+                    backdropFilter: "blur(5px)"
+                }}
                 header={<Header title={title}/>}
                 bordered
                 dataSource={list}

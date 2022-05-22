@@ -56,7 +56,13 @@
 
 /* 布局样式 */
 .ant-layout {
-    background-color: white;
+    background: transparent;
+}
+body {
+    background-image: url(https://fyang.fun/files/fengye.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    backdrop-filter: blur(22px);
 }
 
 .ant-layout-header {
@@ -65,7 +71,8 @@
     z-index: 999999;
     height: auto;
     padding: 0;
-    background-color: white;
+    color: #4F262B;
+    background-color: #a7535a;
 }
 
 .ant-layout-content {
@@ -94,5 +101,32 @@
 
 .ant-layout-footer .ant-card-body {
     padding: 0;
+}
+
+.ant-layout-sider {
+    background-color: transparent;
+}
+
+.ant-pagination-simple .ant-pagination-simple-pager input {
+    background: transparent;
+    border: none;
+}
+
+.ant-timeline-item-head {
+    background-color: transparent;
+}
+
+.ant-timeline-item-tail {
+    border-left: 2px solid #d9d6d6;
+}
+
+.ant-form-item-control-input-content textarea {
+    background: #f2f2f2;
+    border: 1px solid #ebebeb;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+::-webkit-input-placeholder {
+    color: #4F262B !important;
 }
 

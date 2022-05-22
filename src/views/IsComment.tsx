@@ -124,7 +124,7 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
             style={{
                 position: "sticky",
                 top: 50, // 导航栏的高度
-                backgroundColor: "white",
+                // backgroundColor: "white",
                 zIndex: 9
             }}
             content={ <EditorArea { ...areaProps } /> }

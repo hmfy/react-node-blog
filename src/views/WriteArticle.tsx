@@ -174,7 +174,13 @@ function WriteArticle() {
     }
 
     return (
-        <Row style={{padding: "0 10px"}}>
+        <Row style={{
+            padding: "0 10px",
+            height: "100vh",
+            background: "white",
+            overflowY: "auto",
+            paddingBottom: "20px"
+        }}>
             <Col xs={{span: 0}} lg={{span: 2}} xxl={{span: 6}}/>
             <Col xs={{span: 24}} lg={{span: 20}} xxl={{span: 12}} style={{minHeight: "70vh", position: "relative"}}>
                 <Spin style={{position: "absolute", top: "20vh", left: "50%"}} spinning={spinning}/>

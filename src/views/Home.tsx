@@ -1,7 +1,6 @@
 import React from "react";
 import BlogList from "./BlogList";
 import NewArticle from "./NewArticle";
-import HotArticle from "./HotArticle";
 import { Layout, Col, Row } from "antd";
 
 function Home () {
@@ -23,16 +22,15 @@ function Home () {
 						zIndex: 1
 					}}>
 						<NewArticle />
-						<HotArticle />
 						<div style={{
 							marginTop: 20
 						}}>
-							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "#a8a8a8" }}>
+							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "#e2e2e2" }}>
 								鄂ICP备19010491号
 							</a>
 						</div>
 						<div>
-							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "#a8a8a8" }}>
+							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "#e2e2e2" }}>
 								鄂公网安备 42112302000086号
 							</a>
 						</div>

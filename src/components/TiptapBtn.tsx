@@ -116,7 +116,12 @@ function TiptapBtn({editor}: { editor: Editor | null }) {
             <button onClick={() => editor.chain().focus().setTextAlign('right').run()}>
                 <i className='ri-align-right' />
             </button>
-            <button>
+            <button onClick={() => {
+                const href = window.prompt('url:')
+                editor.chain().focus().extendMarkRange('link').setLink({
+                    href: href as string
+                }).run()
+            }}>
                 <i className='ri-link' />
             </button>
             <button>
