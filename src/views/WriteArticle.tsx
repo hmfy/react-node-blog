@@ -101,7 +101,7 @@ function WriteArticle() {
         res.data.list.forEach((file: { path: string }, index) => {
             const location = window.location
             const curDom = domList[index]
-            curDom['src'] = location.origin.replace(location.port, '80') + file.path
+            curDom['src'] = location.origin.replace(location.port || 'no port do not replace', '80') + file.path
         })
     }
     const submitArticle = async () => {
