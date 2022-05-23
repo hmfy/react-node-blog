@@ -35,7 +35,7 @@ function Blog({title, content, createTime, id}: ListItem) {
     const navigate = useNavigate()
     const readArticle = () => navigate('/detail', { state: { articleID: id }, replace: false })
     return (<Card style={cardStyle}>
-        <h1 className="title-font" style={titleStyle} onClick={() => readArticle()}>
+        <h1 style={titleStyle} onClick={() => readArticle()}>
             {title}
         </h1>
         <div>

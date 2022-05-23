@@ -13,6 +13,7 @@ import CodeBlockComponent from "comps/CodeBlockComponent";
 import {file2Base} from "tools/tools";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from '@tiptap/extension-link'
+import Underline from '@tiptap/extension-underline'
 
 type Props = { initialValue?: string, setEditor?: Dispatch<SetStateAction<Editor | null>>, editable?: boolean }
 
@@ -132,7 +133,6 @@ const FyImage = Image.extend({
             }
 
             if (!isResize) return
-            // if (curElement.parentElement.style.margin === '0px auto') return
             curElement.addEventListener('mousemove', changeSize)
             curElement.addEventListener('mouseleave', removeListen)
             curElement.addEventListener('mouseup', removeListen)
@@ -169,6 +169,7 @@ function Tiptap({initialValue = '', setEditor = () => undefined, editable = true
     const editor = useEditor({
         extensions: [
             TabIndent,
+            Underline,
             customCodeBlock,
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
@@ -178,10 +179,7 @@ function Tiptap({initialValue = '', setEditor = () => undefined, editable = true
                 emptyEditorClass: 'is-editor-empty',
                 showOnlyWhenEditable: true
             }),
-            Link.configure({
-                // openOnClick: false,
-                // linkOnPaste: false,
-            }),
+            Link,
             FyImage.configure({
                 allowBase64: true,
                 // inline: true,

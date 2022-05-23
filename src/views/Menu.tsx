@@ -32,7 +32,7 @@ function MenuItem({ item }:ItemProps) {
 	}
 
 	return (
-		<div className={ 'hover-black title-font' }
+		<div className={ 'hover-black' }
 			 style={{...menuItemStyle, ...curMenuItemStyle }} onClick={goto(path)}>
 			<span>
 				{name}

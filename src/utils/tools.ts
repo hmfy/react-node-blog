@@ -5,7 +5,7 @@ import { JSEncrypt } from "jsencrypt"
 import publicKey from "src/config"
 
 // 根据运行环境返回合适的接口
-export const baseUrl = process.env.NODE_ENV === 'production' ? 'https://fyang.fun:3000' : 'https://127.0.0.1:3000'
+export const baseUrl = process.env.NODE_ENV === 'production' ? 'https://fyang.fun:3000' : 'https://192.168.31.68:3000'
 
 // 根据运行环境返回合适的axios实例
 export const getInstance = () => {
@@ -86,7 +86,9 @@ export function getAddress () {
 
 // 获取当前用户登录状态
 export function getLogin () {
-    return localStorage.getItem('token')
+    const expiresTime = Number(localStorage.getItem('expiresTime') || 0)
+    if (!localStorage.getItem('token')) return false
+    return Date.now() < expiresTime
 }
 
 export function uploadFile (fileList:Array<File>):Promise<{data: {list:[]}}> {

@@ -10,15 +10,9 @@ import moment from "dayjs";
 import FLoading from "comps/FLoading";
 import {dataURLtoFile, uploadFile} from "tools/tools";
 
-function ChooseTips({setTags}: { setTags: SetStateAction<any> }) {
-    const [params] = useState({
-        url: '/execute',
-        data: {
-            path: 'article.getTag'
-        }
-    })
-    const {resData: {list}} = useRequest(params)
-    const options = (list as Array<{ tag: string }>).map(({tag}) => ({label: tag, value: tag}))
+type TagList = Array<{ tag: string }>
+function ChooseTips({setTags, list}: { setTags: SetStateAction<any>, list: TagList }) {
+    const options = list.map(({tag}) => ({label: tag, value: tag}))
     const handleChange = (value: []) => setTags(value)
     return (<Select mode="tags" maxTagCount={1} maxTagTextLength={7}
                     style={{width: 120, marginLeft: 20, textAlign: "left"}}
@@ -100,7 +94,29 @@ function MoreMenu({ articleID }:{ articleID: number|null }) {
                 <Button onClick={e => e.preventDefault()}>更多</Button>
             </Dropdown>)
 }
-
+// 替换文章中的图片base64为服务器地址
+const replaceSrc = async (wrapperDom: HTMLElement) => {
+    const waitUploadImgList = wrapperDom.getElementsByClassName('tip-img')
+    const fileList: File[] = []
+    const domList: any = []
+    Array.from(waitUploadImgList).forEach((ele: any) => {
+        if (!ele.src.includes('http')) {
+            // 上传
+            const file = dataURLtoFile(ele.src, 'pic.jpg')
+            fileList.push(file)
+            domList.push(ele)
+        }
+    })
+    if (fileList.length === 0) {
+        return
+    }
+    const res = await uploadFile(fileList)
+    res.data.list.forEach((file: { path: string }, index) => {
+        const location = window.location
+        const curDom = domList[index]
+        curDom['src'] = location.origin.replace(location.port || 'no port do not replace', '80') + file.path
+    })
+}
 function WriteArticle() {
     const navigate = useNavigate()
 
@@ -154,28 +170,15 @@ function WriteArticle() {
         zIndex: 1,
         background: "white"
     }
-    const replaceSrc = async (wrapperDom: HTMLElement) => {
-        const waitUploadImgList = wrapperDom.getElementsByClassName('tip-img')
-        const fileList: File[] = []
-        const domList: any = []
-        Array.from(waitUploadImgList).forEach((ele: any) => {
-            if (!ele.src.includes('http')) {
-                // 上传
-                const file = dataURLtoFile(ele.src, 'pic.jpg')
-                fileList.push(file)
-                domList.push(ele)
-            }
-        })
-        if (fileList.length === 0) {
-            return
+
+    const [params] = useState({
+        url: '/execute',
+        data: {
+            path: 'article.getTag'
         }
-        const res = await uploadFile(fileList)
-        res.data.list.forEach((file: { path: string }, index) => {
-            const location = window.location
-            const curDom = domList[index]
-            curDom['src'] = location.origin.replace(location.port || 'no port do not replace', '80') + file.path
-        })
-    }
+    })
+    const {resData} = useRequest(params)
+    const tagList:TagList = resData.list
 
     // 表单
     const [isModalVisible, setIsModalVisible] = useState(false)
@@ -225,6 +228,7 @@ function WriteArticle() {
         return setTitle('')
     }
 
+    // 发布
     const submitArticle = async () => {
         let content = editor?.getHTML()
         const wrapper = document.createElement("div");
@@ -291,19 +295,6 @@ function WriteArticle() {
                     <TiptapBtn editor={editor}/>
                 </div>
                 <Tiptap setEditor={setEditor}/>
-                {/*<div style={{ textAlign: "right" }}>*/}
-                {/*    <Button*/}
-                {/*        style={{ marginLeft: 10 }}*/}
-                {/*        type="primary"*/}
-                {/*        // icon={ <HomeOutlined /> }*/}
-                {/*        onClick={() => navigate('/')}*/}
-                {/*    >返回主页</Button>*/}
-                {/*    <Button*/}
-                {/*        style={{ marginLeft: 10 }}*/}
-                {/*        type="primary"*/}
-                {/*        onClick={() => {}}*/}
-                {/*    >删除本文</Button>*/}
-                {/*</div>*/}
                 <Modal title="确定发布吗？" okText='发布' cancelText='先不了' visible={isModalVisible} onOk={handleOk}
                        onCancel={handleCancel}>
                     <div style={{textAlign: "left", marginTop: 10, borderTop: "1px solid #F5F5F5", paddingTop: 10}}>
@@ -313,7 +304,7 @@ function WriteArticle() {
                         </Radio.Group>
                         <DatePicker onChange={changeTime} value={moment(time)}
                                     style={{marginLeft: 20, marginBottom: 20}}/>
-                        <ChooseTips setTags={setTags}/>
+                        <ChooseTips setTags={setTags} list={tagList}/>
                     </div>
                 </Modal>
             </Col>

@@ -32,7 +32,7 @@
 }
 
 body {
-    font-family: "Microsoft YaHei", "微软雅黑", "宋体", sans-serif;
+    font-family: Arial, cursive, "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", sans-serif;
 }
 
 html,
@@ -43,7 +43,6 @@ body,
     background-size: cover;
     background-color: var(--bg-theme);
     background-attachment:fixed;
-    font-family: cursive;
     font-weight: bold;
 }
 
@@ -143,9 +142,4 @@ body,
 .hover-black:hover {
     color: black;
     cursor: pointer;
-}
-
-.title-font {
-    font-family: cursive;
-    font-weight: bold;
 }

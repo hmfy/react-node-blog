@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useRef} from 'react'
 import {NodeViewWrapper, NodeViewContent} from '@tiptap/react'
 import 'assets/atom-one-dark.scss'
 
@@ -26,14 +26,24 @@ function LanguageSelect(props: Props) {
             }
         }, updateAttributes, extension
     } = props
+    const select = useRef(null)
     const languageList = extension.options.lowlight.listLanguages()
     useEffect(() => {
-        updateAttributes({
-            language: 'javascript'
-        })
-    }, [updateAttributes])
+        if (select.current) {
+            const info = select.current as { value: string }
+            if (info.value) {
+                updateAttributes({
+                    language: info.value
+                })
+            } else {
+                updateAttributes({
+                    language: 'javascript'
+                })
+            }
+        }
+    }, [updateAttributes, select])
     return (<div className='select-language' style={{ textAlign: 'right', marginBottom: 10 }}>
-        <select style={{
+        <select ref={select} style={{
             outline: "1px solid #767676cc",
             borderRadius: 4,
             background: "transparent",

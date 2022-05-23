@@ -124,10 +124,10 @@ function TiptapBtn({editor}: { editor: Editor | null }) {
             }}>
                 <i className='ri-link' />
             </button>
-            <button>
+            <button onClick={() => editor.chain().focus().toggleUnderline().run()}>
                 <i className='ri-underline' />
             </button>
-            <button>
+            {/*<button>
                 <i className='ri-font-size' />
             </button>
             <button>
@@ -143,17 +143,11 @@ function TiptapBtn({editor}: { editor: Editor | null }) {
                 <i className='ri-page-break' />
             </button>
             <button>
-                <i className='ri-paste' />
-            </button>
-            <button>
-                <i className='ri-copy' />
-            </button>
-            <button>
                 <i className='ri-left-rotate' />
             </button>
             <button>
                 <i className='ri-right-rotate' />
-            </button>
+            </button>*/}
         </div>
     )
 }

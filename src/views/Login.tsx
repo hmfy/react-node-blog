@@ -11,15 +11,16 @@ function Login() {
     const { search } = useLocation()
 
     const onFinish = async ({ username, password }: any) => {
-        const { data: { token } } = await request({
+        const { data: { token, expiresTime } } = await request({
             url: '/user/login',
             data: {
                 username: setEncrypt(username),
                 password: setEncrypt(password),
             }
         })
-        if (token) {
+        if (token && expiresTime) {
             localStorage.setItem('token', token)
+            localStorage.setItem('expiresTime', String(Date.now() + expiresTime))
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
             await message.success('登陆成功！')
             navigate(search.split('?')[1] || '/')

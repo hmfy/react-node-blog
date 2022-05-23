@@ -11,6 +11,7 @@ export type ResData<T = []> = {
     pageNo?: number
     total?: number
     token?: string
+    expiresTime?: number
 }
 
 export type Response<S = []> = {
