@@ -2,7 +2,7 @@
   "name": "react-node-blog",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://fyang.fun/blog/",
+  "homepage_notes": "homepage: https://fyang.fun/blog/",
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",

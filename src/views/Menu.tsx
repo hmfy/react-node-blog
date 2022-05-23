@@ -18,11 +18,11 @@ function MenuItem({ item }:ItemProps) {
 		navigate(path)
 	}
 	const chooseItem = () => path === pathname
-	const chooseTheme = '#4F262B' // 选中菜单主题色
 	const curMenuItemStyle = chooseItem() ? ( // 被选中的菜单颜色
 		{
-			color: chooseTheme,
-			fontWeight: "bold"
+			color: "#000",
+			fontWeight: "bold",
+			fontSize: "20px"
 		}
 	) : {}
 	const menuItemStyle = {
@@ -32,12 +32,9 @@ function MenuItem({ item }:ItemProps) {
 	}
 
 	return (
-		<div className={ 'hover-black' }
+		<div className={ 'hover-black title-font' }
 			 style={{...menuItemStyle, ...curMenuItemStyle }} onClick={goto(path)}>
-			<span style={{
-				borderBottom: `2px solid ${chooseTheme}`,
-				borderBottomColor: chooseItem() ? chooseTheme : 'transparent'
-			}}>
+			<span>
 				{name}
 			</span>
 		</div>
@@ -83,7 +80,7 @@ function Menu() {
 	const inputStyle:CSSProperties = {
 		width: 300,
 		height: '30px',
-		borderBottom: '1px solid #4F262B',
+		borderBottom: '1px solid var(--tips)',
 		borderRadius: '0'
 	}
 

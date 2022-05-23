@@ -25,12 +25,12 @@ function Home () {
 						<div style={{
 							marginTop: 20
 						}}>
-							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "#e2e2e2" }}>
+							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "var(--tips-light)" }}>
 								鄂ICP备19010491号
 							</a>
 						</div>
 						<div>
-							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "#e2e2e2" }}>
+							<a rel="noreferrer" href={'http://beian.miit.gov.cn/'} target={'_blank'} style={{ color: "var(--tips-light)" }}>
 								鄂公网安备 42112302000086号
 							</a>
 						</div>

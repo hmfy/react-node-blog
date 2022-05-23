@@ -1,19 +1,18 @@
 import React, {CSSProperties, useState} from "react";
-import useRequest, {request} from "hooks/useRequest";
+import useRequest from "hooks/useRequest";
 import FLoading from "comps/FLoading";
 import FEmpty from "comps/FEmpty";
-import {Col, message, Pagination, Row} from "antd";
-import {
-    DeleteOutlined, EditOutlined,
-    ReadOutlined} from '@ant-design/icons';
+import {Col, Pagination, Row} from "antd";
+import { EditOutlined } from '@ant-design/icons';
 import {useNavigate} from "react-router-dom";
 import {getLogin, parseHTML} from "tools/tools";
+import moment from "dayjs";
 
-type ListItem = { content: string, id: number, refresh?: () => void }
+type ListItem = { content: string, id: number, createTime: number }
 
 type List = Array<ListItem>
 
-const ArticleItem = ({content, id, refresh = () => {} }: ListItem ) => {
+const ArticleItem = ({content, id, createTime }: ListItem ) => {
     const wrapperStyle: CSSProperties = {
         display: "flex",
         justifyContent: "space-between",
@@ -33,35 +32,22 @@ const ArticleItem = ({content, id, refresh = () => {} }: ListItem ) => {
         marginLeft: 10,
         textAlign: "right",
         cursor: "pointer",
-        fontSize: "16px"
+        color: "var(--tips-light)"
     }
 
     const navigate = useNavigate()
-    const delArticle = async () => {
-        await request({
-            url: "/execute",
-            data: {
-                path: 'article.delArticle',
-                articleID: id
-            }
-        })
-        refresh()
-        await message.success('删除成功！')
-    }
     const editArticle = () => {
         navigate('/write', { state: { articleID: id }, replace: false })
     }
+    const readArticle = () => navigate('/detail', { state: { articleID: id }, replace: false })
     return (<div className='hover-blue fxs-height-30'
                  style={wrapperStyle}>
-        <div style={contentStyle}>
+        <div style={contentStyle} onClick={() => readArticle()}>
             {parseHTML(content)}
         </div>
         <div style={toolbarStyle}>
-            <ReadOutlined onClick={() => {
-                navigate('/detail', { state: { articleID: id }, replace: false })
-            }} />
+            { moment(createTime).fromNow() }
             { getLogin() ? <EditOutlined style={{marginLeft: 20}} onClick={ editArticle } /> : null }
-            { getLogin() ? <DeleteOutlined style={{marginLeft: 20}} onClick={ delArticle } /> : null }
         </div>
     </div>)
 }
@@ -78,7 +64,7 @@ function ArticleList() {
             isAll: true
         }
     })
-    let {empty, loading, resData, setLoading, refresh} = useRequest(params)
+    let {empty, loading, resData, setLoading} = useRequest(params)
     const list: List = resData.list
     const handleChange = (page:number, pageSize:number) => {
         setLoading(true)
@@ -100,7 +86,7 @@ function ArticleList() {
                 <div style={{minHeight: 500}} className='fxs-min-height-300'>
                     <FLoading show={loading}/>
                     {
-                        list.map((ele, index) => <ArticleItem key={index} {...ele} refresh={refresh} />)
+                        list.map((ele, index) => <ArticleItem key={index} {...ele} />)
                     }
                     <FEmpty show={empty}/>
                 </div>

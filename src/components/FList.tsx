@@ -4,6 +4,7 @@ import FLoading from "comps/FLoading";
 import useRequest from "hooks/useRequest";
 import {useNavigate} from "react-router-dom";
 import {parseHTML} from "tools/tools";
+import FEmpty from "comps/FEmpty";
 
 // eslint-disable-next-line
 export type ListItem = { title: string, content: string, id: number }
@@ -56,14 +57,15 @@ function FList({path, title, style}: ListParams) {
                     ...style,
                     background: "rgba(255, 255, 255, 0.2)",
                     borderRadius: "6px",
-                    boxShadow: "rgb(0 0 0 / 12%) 0px 0px 4px, rgb(0 0 0 / 8%) 0px 2px 2px",
-                    backdropFilter: "blur(5px)"
+                    boxShadow: "rgb(0 0 0 / 12%) 0px 0px 4px, rgb(0 0 0 / 8%) 0px 2px 2px"
                 }}
                 header={<Header title={title}/>}
                 bordered
                 dataSource={list}
                 renderItem={item => <ListItem {...item} />}
-            />
+            >
+                <FEmpty show={ !list.length } />
+            </List>
         </div>
     )
 }

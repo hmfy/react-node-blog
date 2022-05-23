@@ -5,12 +5,18 @@ import AppLayout from 'views/Layout'
 import 'dayjs/locale/zh-cn'
 import moment from "dayjs";
 import {setAddress} from "tools/tools";
+import ConfigProvider from "antd/es/config-provider";
+import {BrowserRouter as Router} from "react-router-dom";
 moment.locale('zh-cn')
 
 setAddress()
 
 function App() {
-	return <AppLayout />
+	return <ConfigProvider renderEmpty={() => <span/>}>
+		<Router>
+			<AppLayout />
+		</Router>
+	</ConfigProvider>
 }
 
 export default App;

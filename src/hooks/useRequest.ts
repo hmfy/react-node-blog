@@ -56,7 +56,7 @@ export async function request({url = defaultAPI, ...resetParams}: Params): Promi
                     reject(error)
                 }
                 if (error.response.statusText === "Unauthorized") {
-                    const curPath = window.location.pathname.split('/blog')[1]
+                    const curPath = window.location.pathname
                     const origin = window.location.origin
                     Modal.warning({
                         keyboard: false,
@@ -65,11 +65,11 @@ export async function request({url = defaultAPI, ...resetParams}: Params): Promi
                         centered: true,
                         content: '当前功能需要登陆才能继续使用',
                         onOk () {
-                            window.location.href =  origin + '/blog/login?' + curPath
+                            window.location.href =  origin + '/login?' + curPath
                         },
                         onCancel () {
                             if (['/write'].includes(curPath)) {
-                                window.location.href =  origin + '/blog'
+                                window.location.href =  origin + '/'
                             }
                         }
                     })

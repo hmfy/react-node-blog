@@ -27,22 +27,19 @@ function Blog({title, content, createTime, id}: ListItem) {
         cursor: "pointer",
         border: "none",
         backgroundColor: "rgba(255, 255, 255, 0.2)",
-        marginBottom: 10,
+        marginBottom: 20,
         borderRadius: "6px",
-        boxShadow: "rgb(0 0 0 / 12%) 0px 0px 4px, rgb(0 0 0 / 8%) 0px 2px 2px",
-        padding: "15px",
-        backdropFilter: "blur(5px)"
+        boxShadow: "rgb(0 0 0 / 12%) 0px 0px 4px, rgb(0 0 0 / 8%) 0px 2px 2px"
     }
     const titleStyle: CSSProperties = {fontWeight: "bold", fontSize: "16px", marginBottom: 10}
     const navigate = useNavigate()
+    const readArticle = () => navigate('/detail', { state: { articleID: id }, replace: false })
     return (<Card style={cardStyle}>
-        <h1 style={titleStyle}>
+        <h1 className="title-font" style={titleStyle} onClick={() => readArticle()}>
             {title}
         </h1>
         <div>
-            <div className={'overflow-dot'} onClick={() => {
-                navigate('/detail', { state: { articleID: id }, replace: false })
-            }}>
+            <div className={'overflow-dot'} onClick={() => readArticle()}>
                 { parseHTML(content) }
             </div>
             <div style={{ textAlign: "right", color: "rgba(0, 0, 0, 0.45)", marginTop: "10px" }}>
@@ -78,7 +75,7 @@ function BlogList() {
             <FLoading show={loading}/>
             <InfiniteScroll
                 ref={reactElem}
-                style={{padding: "10px", boxSizing: "border-box"}}
+                style={{padding: "15px 5px", boxSizing: "border-box"}}
                 height={bodyHeight}
                 dataLength={list.length}
                 next={fetchData}

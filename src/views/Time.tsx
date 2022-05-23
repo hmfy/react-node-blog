@@ -1,4 +1,4 @@
-import React, {CSSProperties, ReactElement, useState} from "react";
+import React, {CSSProperties, useState} from "react";
 import FLoading from "comps/FLoading";
 import FEmpty from "comps/FEmpty";
 import useRequest from "hooks/useRequest";
@@ -8,7 +8,6 @@ import moment from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime'
 import {parseHTML} from "tools/tools";
 import {useNavigate} from "react-router-dom";
-import { SmileOutlined } from '@ant-design/icons';
 moment.extend(relativeTime)
 
 type ListItem = {
@@ -27,7 +26,7 @@ function Time() {
     })
     let {empty, loading, resData} = useRequest(params)
     const list: List = resData.list
-    const wrapperStyle: CSSProperties = {paddingTop: 10, minHeight: 300, width: "100%"}
+    const wrapperStyle: CSSProperties = {paddingTop: 10, minHeight: 300, width: "100%", marginTop: "10px"}
 
     return (
         <Row style={wrapperStyle}>
@@ -39,11 +38,9 @@ function Time() {
                         list.map((timeItem, index) => (
                             <Timeline.Item key={index} dot={
                                 <div style={{
-                                    backgroundColor: "#d9d6d6",
+                                    backgroundColor: "var(--tips)",
                                     width: 8,
                                     height: 8,
-                                    // border: "2px solid #8e8e8e",
-                                    // background: "rgb(161 179 196)",
                                     borderRadius: "50%"
                                 }}/>
                             }>
@@ -56,7 +53,7 @@ function Time() {
                                 }} onClick={ () => {
                                     navigate('/write', { state: { articleID: timeItem.id }, replace: false })
                                 } } >
-                                    <div>
+                                    <div style={{ color: "var(--tips-light)" }}>
                                         { moment(timeItem.createTime).format("YYYY-MM-DD") }
                                     </div>
                                     <div style={{ textAlign: "left" }}>

@@ -6,6 +6,7 @@ import FLoading from "comps/FLoading";
 import IsBackTop from "comps/IsBackTop";
 import useRequest, {request} from "hooks/useRequest";
 import {getAddress} from "tools/tools";
+import FEmpty from "comps/FEmpty";
 const {TextArea} = Input
 moment.extend(relativeTime)
 
@@ -43,9 +44,17 @@ const Item = ({itemData}: { itemData: ListItem }) => {
     const { author, content, createTime } = itemData
     return (
         <Comment
-            author={<Box data={(author || '') + '网友'} />}
+            author={
+                <div style={{ color: "var(--tips)" }} >
+                    {(author || '') + '网友'}
+                </div>
+            }
             content={<Box data={content} />}
-            datetime={<Box data={moment(createTime).fromNow()} />}
+            datetime={
+                <div style={{ color: "var(--tips-light)" }}>
+                    { moment(createTime).fromNow() }
+                </div>
+            }
         />
     )
 }
@@ -61,7 +70,9 @@ const MyList = ({ data }:{data: List}) => {
             </li>
         )}
 
-    />)
+    >
+        <FEmpty show={ !data.length } />
+    </List>)
 }
 
 // 留言区
@@ -124,7 +135,6 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
             style={{
                 position: "sticky",
                 top: 50, // 导航栏的高度
-                // backgroundColor: "white",
                 zIndex: 9
             }}
             content={ <EditorArea { ...areaProps } /> }

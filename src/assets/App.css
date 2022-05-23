@@ -5,6 +5,9 @@
 */
 :root {
     font-size: 16px;
+    --tips: rgb(110, 110, 110);
+    --tips-light: rgba(0, 0, 0, .45);
+    --bg-theme: #ddd;
 }
 
 #root {
@@ -14,55 +17,9 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-.card-box-shadow {
-    border-color: transparent;
-    box-shadow: 0 1px 2px -2px rgba(0, 0, 0, .16), 0 3px 6px 0 rgba(0, 0, 0, .12), 0 5px 12px 4px rgba(0, 0, 0, .09);
-}
-
-.ant-timeline-item-content {
-    margin: 0 20px;
-}
-
-.overflow-dot {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    text-indent: 2em;
-}
-
-::-webkit-scrollbar {
-    display: none
-}
-
-.ant-card-actions {
-    border: none;
-}
-
-.ant-card-actions > li:not(:last-child) {
-    border-color: transparent;
-}
-
-.hover-blue:hover {
-    color: #40a9ff !important;
-    cursor: pointer;
-}
-
-.hover-black:hover {
-    color: black;
-    cursor: pointer;
-}
-
 /* 布局样式 */
 .ant-layout {
     background: transparent;
-}
-body {
-    background-image: url(https://fyang.fun/files/fengye.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    backdrop-filter: blur(22px);
 }
 
 .ant-layout-header {
@@ -71,12 +28,23 @@ body {
     z-index: 999999;
     height: auto;
     padding: 0;
-    color: #4F262B;
-    background-color: #a7535a;
+    color: var(--tips);
 }
 
-.ant-layout-content {
+body {
+    font-family: "Microsoft YaHei", "微软雅黑", "宋体", sans-serif;
+}
 
+html,
+body,
+.ant-layout-header {
+    background-image: url(https://fyang.fun/files/desktopbg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: var(--bg-theme);
+    background-attachment:fixed;
+    font-family: cursive;
+    font-weight: bold;
 }
 
 .ant-layout-sider {
@@ -116,8 +84,12 @@ body {
     background-color: transparent;
 }
 
+.ant-list-split .ant-list-header {
+    border-bottom: transparent;
+}
+
 .ant-timeline-item-tail {
-    border-left: 2px solid #d9d6d6;
+    border-left: 2px solid var(--tips);
 }
 
 .ant-form-item-control-input-content textarea {
@@ -127,6 +99,53 @@ body {
 }
 
 ::-webkit-input-placeholder {
-    color: #4F262B !important;
+    color: var(--tips) !important;
 }
 
+.card-box-shadow {
+    border-color: transparent;
+    box-shadow: 0 1px 2px -2px rgba(0, 0, 0, .16), 0 3px 6px 0 rgba(0, 0, 0, .12), 0 5px 12px 4px rgba(0, 0, 0, .09);
+}
+
+.ant-timeline-item-content {
+    margin: 0 20px;
+}
+
+.overflow-dot {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-indent: 2em;
+}
+
+::-webkit-scrollbar {
+    display: none
+}
+
+.ant-card-actions {
+    border: none;
+}
+
+.ant-card-actions > li:not(:last-child) {
+    border-color: transparent;
+}
+
+.hover-blue {
+    cursor: pointer;
+}
+
+.hover-blue:hover {
+    color: #0987ee !important;
+}
+
+.hover-black:hover {
+    color: black;
+    cursor: pointer;
+}
+
+.title-font {
+    font-family: cursive;
+    font-weight: bold;
+}

@@ -78,7 +78,7 @@ function Detail(props: { articleID: number }) {
     }
     const footerStyle = {
         marginTop: 90,
-        color: "#8a8f8d"
+        color: 'var(--tips)'
     }
     const tipsStyle = {
         display: "flex",

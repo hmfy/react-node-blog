@@ -1,6 +1,5 @@
 import React, {CSSProperties, SetStateAction, useEffect, useState} from "react";
-import {Button, Col, Input, message, Radio, Row, Select, Spin} from "antd";
-import {HomeOutlined} from "@ant-design/icons";
+import {Button, Col, Dropdown, Input, Menu, MenuProps, message, Modal, Radio, Row, Select} from "antd";
 import Tiptap from "comps/Tiptap";
 import DatePicker from "comps/DatePicker";
 import useRequest, {request} from "hooks/useRequest";
@@ -8,6 +7,7 @@ import {Editor} from "@tiptap/react";
 import TiptapBtn from "comps/TiptapBtn";
 import {useLocation, useNavigate} from "react-router-dom";
 import moment from "dayjs";
+import FLoading from "comps/FLoading";
 import {dataURLtoFile, uploadFile} from "tools/tools";
 
 function ChooseTips({setTags}: { setTags: SetStateAction<any> }) {
@@ -28,11 +28,77 @@ function ChooseTips({setTags}: { setTags: SetStateAction<any> }) {
 }
 
 type Data = {
-    title:string,
-    content:string,
-    createTime:number,
+    title: string,
+    content: string,
+    createTime: number,
     type: number,
     tag: string
+}
+
+function MoreMenu({ articleID }:{ articleID: number|null }) {
+    const navigate = useNavigate()
+    const delArticle = async (id:number|null) => {
+        await request({
+            url: "/execute",
+            data: {
+                path: 'article.delArticle',
+                articleID: id
+            }
+        })
+        await message.success('删除成功！即将返回主页')
+        navigate('/')
+    }
+    const [menuList, setMenuList] = useState([
+        {
+            label: '返回主页',
+            key: '1',
+        }
+    ])
+    useEffect(() => {
+        if (articleID) {
+            setMenuList([
+                {
+                    label: '返回主页',
+                    key: '1',
+                },
+                {
+                    label: '删除本文',
+                    key: '2',
+                }
+            ])
+        }
+    }, [ articleID ])
+    const handleClick:MenuProps['onClick'] = ({ key }) => {
+        switch (key) {
+            case '1':
+                // 返回
+                return navigate('/')
+            case '2':
+                // 删除
+                return Modal.warning({
+                    keyboard: false,
+                    okText: "确定",
+                    closable: true,
+                    centered: true,
+                    content: '确认删除吗？不可撤回哦！',
+                    onOk () {
+                        delArticle(articleID).then()
+                    },
+                    onCancel () {}
+                })
+        }
+    }
+    const menu = (
+        <Menu
+            onClick={handleClick}
+            items={menuList}
+        />
+    );
+
+    return (<Dropdown overlay={menu} arrow={{pointAtCenter: true}}
+                      trigger={['click']} placement="bottom">
+                <Button onClick={e => e.preventDefault()}>更多</Button>
+            </Dropdown>)
 }
 
 function WriteArticle() {
@@ -43,9 +109,15 @@ function WriteArticle() {
 
     // 编辑模式
     const {state} = useLocation()
-    let articleID = 0
-    const [ reqComplete, setReqComplete ] = useState(false)
-    if (state) ( {articleID} = (state as { articleID: number }) )
+    const [ articleID, setArticleID ] = useState(0)
+    const [reqComplete, setReqComplete] = useState(false)
+    useEffect(() => {
+        if (!state) return
+        const _state = state as { articleID: number }
+        if (_state.articleID) {
+            setArticleID(_state.articleID)
+        }
+    }, [state])
     useEffect(() => {
         if (!articleID) return
         if (!editor) return
@@ -61,7 +133,7 @@ function WriteArticle() {
             if (res.data.list.length) {
                 setReqComplete(true)
                 setSpinning(false)
-                const { title, content, createTime, type } = res.data.list[0]
+                const {title, content, createTime, type} = res.data.list[0]
                 setTitle(title)
                 editor?.commands.setContent(content)
                 setTime(createTime)
@@ -82,11 +154,11 @@ function WriteArticle() {
         zIndex: 1,
         background: "white"
     }
-    const replaceSrc = async (wrapperDom:HTMLElement) => {
+    const replaceSrc = async (wrapperDom: HTMLElement) => {
         const waitUploadImgList = wrapperDom.getElementsByClassName('tip-img')
         const fileList: File[] = []
         const domList: any = []
-        Array.from(waitUploadImgList).forEach((ele:any) => {
+        Array.from(waitUploadImgList).forEach((ele: any) => {
             if (!ele.src.includes('http')) {
                 // 上传
                 const file = dataURLtoFile(ele.src, 'pic.jpg')
@@ -104,6 +176,55 @@ function WriteArticle() {
             curDom['src'] = location.origin.replace(location.port || 'no port do not replace', '80') + file.path
         })
     }
+
+    // 表单
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const handleCancel = () => {
+        setIsModalVisible(false)
+        setSpinning(false)
+    }
+    const [parseContent, setParseContent] = useState('')
+    const handleOk = async () => {
+        setIsModalVisible(false)
+        setSpinning(true)
+        let {data} = await request({
+            url: "execute",
+            data: {
+                path: 'article.add',
+                content: parseContent,
+                title: title,
+                createTime: time,
+                address: null,
+                tags: tags.join(','),
+                type: articleType,
+                articleID: articleID
+            }
+        })
+        if (data.err) {
+            return message.error({
+                content: '提交失败！',
+                style: {
+                    marginTop: '20vh',
+                },
+            })
+        }
+
+        setSpinning(false)
+
+        await message.success({
+            duration: 1,
+            content: '发布成功！',
+            style: {
+                marginTop: '20vh',
+            },
+        })
+
+        if (articleID) navigate('/')
+
+        editor?.commands.clearContent()
+        return setTitle('')
+    }
+
     const submitArticle = async () => {
         let content = editor?.getHTML()
         const wrapper = document.createElement("div");
@@ -115,62 +236,31 @@ function WriteArticle() {
                 content = ''
             }
         }
-        if (content) {
-            if (!title && ( articleType === 1 )) {
-                return message.info({
-                    content: '标题为空！',
-                    style: {
-                        marginTop: '20vh',
-                    },
-                })
-            }
-
-            setSpinning(true)
-
-            // 处理 src
-            await replaceSrc(wrapper)
-
-            let {data} = await request({
-                url: "execute",
-                data: {
-                    path: 'article.add',
-                    content: wrapper.innerHTML,
-                    title: title,
-                    createTime: time,
-                    address: null,
-                    tags: tags.join(','),
-                    type: articleType,
-                    articleID: articleID
-                }
-            })
-            if (data.err) {
-                return message.error({
-                    content: '提交失败！',
-                    style: {
-                        marginTop: '20vh',
-                    },
-                })
-            }
-            await message.success({
-                duration: 1,
-                content: '发布成功！',
+        if (!content) {
+            return message.info({
+                content: '内容为空！',
                 style: {
                     marginTop: '20vh',
                 },
             })
-            setSpinning(false)
-
-            if (articleID) navigate('/')
-
-            editor?.commands.clearContent()
-            return setTitle('')
         }
-        return message.info({
-            content: '内容为空！',
-            style: {
-                marginTop: '20vh',
-            },
-        })
+        if (!title && (articleType === 1)) {
+            return message.info({
+                content: '标题为空！',
+                style: {
+                    marginTop: '20vh',
+                },
+            })
+        }
+
+        // 弹窗
+        setIsModalVisible(true)
+
+        // 处理 src
+        await replaceSrc(wrapper)
+
+        // 保存内容
+        setParseContent(wrapper.innerHTML)
     }
 
     return (
@@ -183,9 +273,9 @@ function WriteArticle() {
         }}>
             <Col xs={{span: 0}} lg={{span: 2}} xxl={{span: 6}}/>
             <Col xs={{span: 24}} lg={{span: 20}} xxl={{span: 12}} style={{minHeight: "70vh", position: "relative"}}>
-                <Spin style={{position: "absolute", top: "20vh", left: "50%"}} spinning={spinning}/>
+                <FLoading show={spinning}/>
                 <div style={headerStyle}>
-                    <div style={{display: "flex", justifyContent: "space-between" }}>
+                    <div style={{display: "flex", justifyContent: "space-between"}}>
                         <Input style={{flex: 1, fontSize: "26px", fontWeight: "bold"}} placeholder="请输入标题"
                                value={title}
                                maxLength={100}
@@ -193,23 +283,39 @@ function WriteArticle() {
                                bordered={false}/>
                         <div>
                             <div style={{textAlign: "right", marginTop: 10}}>
-                                <Button type="primary" onClick={submitArticle}>发布</Button>
+                                <MoreMenu articleID={articleID} />
+                                <Button type="primary" onClick={submitArticle} style={{marginLeft: 20}}>发布</Button>
                             </div>
                         </div>
                     </div>
                     <TiptapBtn editor={editor}/>
                 </div>
                 <Tiptap setEditor={setEditor}/>
-                <div style={{textAlign: "right", marginTop: 10, borderTop: "1px solid #F5F5F5", paddingTop: 10 }}>
-                    <Radio.Group value={articleType} onChange={e => setArticleType(e.target.value)}>
-                        <Radio.Button value={1} >文章</Radio.Button>
-                        <Radio.Button value={2}>日志</Radio.Button>
-                    </Radio.Group>
-                    <DatePicker onChange={ changeTime } value={ moment(time) } style={{marginLeft: 20}} />
-                    <ChooseTips setTags={setTags}/>
-                    <HomeOutlined className='hover-blue' style={{marginLeft: 20, fontSize: 20}}
-                                  onClick={() => navigate('/')}/>
-                </div>
+                {/*<div style={{ textAlign: "right" }}>*/}
+                {/*    <Button*/}
+                {/*        style={{ marginLeft: 10 }}*/}
+                {/*        type="primary"*/}
+                {/*        // icon={ <HomeOutlined /> }*/}
+                {/*        onClick={() => navigate('/')}*/}
+                {/*    >返回主页</Button>*/}
+                {/*    <Button*/}
+                {/*        style={{ marginLeft: 10 }}*/}
+                {/*        type="primary"*/}
+                {/*        onClick={() => {}}*/}
+                {/*    >删除本文</Button>*/}
+                {/*</div>*/}
+                <Modal title="确定发布吗？" okText='发布' cancelText='先不了' visible={isModalVisible} onOk={handleOk}
+                       onCancel={handleCancel}>
+                    <div style={{textAlign: "left", marginTop: 10, borderTop: "1px solid #F5F5F5", paddingTop: 10}}>
+                        <Radio.Group value={articleType} onChange={e => setArticleType(e.target.value)}>
+                            <Radio.Button value={1}>文章</Radio.Button>
+                            <Radio.Button value={2}>日志</Radio.Button>
+                        </Radio.Group>
+                        <DatePicker onChange={changeTime} value={moment(time)}
+                                    style={{marginLeft: 20, marginBottom: 20}}/>
+                        <ChooseTips setTags={setTags}/>
+                    </div>
+                </Modal>
             </Col>
             <Col xs={{span: 0}} lg={{span: 2}} xxl={{span: 6}}/>
         </Row>)
