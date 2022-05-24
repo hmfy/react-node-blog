@@ -15,16 +15,18 @@ function formatter(value?: number | undefined) {
 function ImgZip() {
 	const [ compress, setCompress ] = useState(300)
 
+	const uid2ServerFile = new Map()
+
 	const props = {
 		name: 'photos',
 		multiple: true,
-		action: `${baseUrl}/file/zip`,
+		action: `${baseUrl}/file/zip2`,
 		data: {
 			compressVal: compress * 1024, // kb
 		},
-		async onDownload ({ name }:UploadFile) {
+		async onDownload ({uid}:UploadFile) {debugger
 			let a = document.createElement("a")
-			a.href = `${baseUrl}/file/download?path=${name}&type=zip`
+			a.href = `${baseUrl}/file/download2?path=${uid2ServerFile.get(uid)}&type=zip`
 			a.target = 'blank'
 			a.click()
 		},
@@ -50,6 +52,7 @@ function ImgZip() {
 				console.log(info.file, info.fileList);
 			}
 			if (status === 'done') {
+				uid2ServerFile.set(info.file.uid, info.file.response[0].filename)
 				message.success(`${info.file.name} file uploaded successfully.`).then(r => r);
 			} else if (status === 'error') {
 				message.error(`${info.file.name} file upload failed.`).then(r => r);

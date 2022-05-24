@@ -93,7 +93,7 @@ export function getLogin () {
 
 export function uploadFile (fileList:Array<File>):Promise<{data: {list:[]}}> {
     // 上传文件
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
         const formData = new FormData()
         Array.from(fileList).forEach(file => formData.append(`files`, file))
         getInstance().request({
@@ -102,7 +102,7 @@ export function uploadFile (fileList:Array<File>):Promise<{data: {list:[]}}> {
                 "Content-Type": "multipart/form-data;"
             },
             data: formData
-        }).then(resolve)
+        }).then(resolve).catch(err => reject(err))
     })
 }
 

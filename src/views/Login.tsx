@@ -20,7 +20,7 @@ function Login() {
         })
         if (token && expiresTime) {
             localStorage.setItem('token', token)
-            localStorage.setItem('expiresTime', String(Date.now() + expiresTime))
+            localStorage.setItem('expiresTime', String(Date.now() + expiresTime * 1000))
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
             await message.success('登陆成功！')
             navigate(search.split('?')[1] || '/')

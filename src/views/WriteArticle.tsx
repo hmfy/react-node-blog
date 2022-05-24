@@ -100,7 +100,7 @@ const replaceSrc = async (wrapperDom: HTMLElement) => {
     const fileList: File[] = []
     const domList: any = []
     Array.from(waitUploadImgList).forEach((ele: any) => {
-        if (!ele.src.includes('http')) {
+        if (!ele.src.includes('http://') || !ele.src.includes('https://')) {
             // 上传
             const file = dataURLtoFile(ele.src, 'pic.jpg')
             fileList.push(file)
@@ -110,12 +110,17 @@ const replaceSrc = async (wrapperDom: HTMLElement) => {
     if (fileList.length === 0) {
         return
     }
-    const res = await uploadFile(fileList)
-    res.data.list.forEach((file: { path: string }, index) => {
-        const location = window.location
-        const curDom = domList[index]
-        curDom['src'] = location.origin.replace(location.port || 'no port do not replace', '80') + file.path
-    })
+
+    try {
+        const res = await uploadFile(fileList)
+        res.data.list.forEach((file: { path: string }, index) => {
+            const location = window.location
+            const curDom = domList[index]
+            curDom['src'] = location.origin.replace(location.port || 'no port do not replace', '80') + file.path
+        })
+    } catch (e) {
+        console.log(e)
+    }
 }
 function WriteArticle() {
     const navigate = useNavigate()
@@ -186,15 +191,19 @@ function WriteArticle() {
         setIsModalVisible(false)
         setSpinning(false)
     }
-    const [parseContent, setParseContent] = useState('')
+    const [parseDom, setParseDom] = useState(document.body)
     const handleOk = async () => {
         setIsModalVisible(false)
         setSpinning(true)
+
+        // 上传图片
+        await replaceSrc(parseDom)
+
         let {data} = await request({
             url: "execute",
             data: {
                 path: 'article.add',
-                content: parseContent,
+                content: parseDom.innerHTML,
                 title: title,
                 createTime: time,
                 address: null,
@@ -260,11 +269,8 @@ function WriteArticle() {
         // 弹窗
         setIsModalVisible(true)
 
-        // 处理 src
-        await replaceSrc(wrapper)
-
         // 保存内容
-        setParseContent(wrapper.innerHTML)
+        setParseDom(wrapper)
     }
 
     return (
