@@ -4,6 +4,7 @@ import {getInstance} from "tools/tools"
 import {message, Modal} from "antd";
 
 export type ResData<T = []> = {
+    code: number,
     err: null | object
     list: T
     pageQuery?: boolean
@@ -14,7 +15,7 @@ export type ResData<T = []> = {
     expiresTime?: number
 }
 
-export type Response<S = []> = {
+export type ParseData<S = []> = {
     data: ResData<S>
 }
 
@@ -30,8 +31,8 @@ export default useRequest
 
 const defaultAPI = '/execute2'
 
-export function request<S = []>(a: Params): Promise<Response<S>>
-export async function request({url = defaultAPI, ...resetParams}: Params): Promise<Response> {
+export function request<S = []>(a: Params): Promise<ParseData<S>>
+export async function request({url = defaultAPI, ...resetParams}: Params): Promise<ParseData> {
     return new Promise(async (resolve, reject) => {
         getInstance().request({
             url: url,
@@ -39,24 +40,16 @@ export async function request({url = defaultAPI, ...resetParams}: Params): Promi
             ...resetParams
         })
             .then(result => {
-                const { data: { err } } = result
+                const { data: { err, code } } = result
 
-                if (err) {
-                    message.error(err)
-                    resolve({
-                        data: {
-                            err: err,
-                            list: []
-                        }
-                    })
+                // 正常请求
+                if (code === 200) {
+                    return resolve(result)
                 }
-                resolve(result)
-            })
-            .catch(error => {
-                if (!error.response) {
-                    reject(error)
-                }
-                if (error.response.statusText === "Unauthorized") {
+
+                // 失败请求
+                if (code === 1001) {
+                    // 服务器返回 1001，token 无效
                     const curPath = window.location.pathname
                     const origin = window.location.origin
                     Modal.warning({
@@ -75,6 +68,21 @@ export async function request({url = defaultAPI, ...resetParams}: Params): Promi
                         }
                     })
                 }
+                else {
+                    // 服务器返回错误
+                    message.error(err)
+                    return resolve({
+                        data: {
+                            code: 200,
+                            err: err,
+                            list: []
+                        }
+                    })
+                }
+            })
+            .catch(error => {
+                // 异常
+                reject(error)
             })
     })
 }
@@ -88,7 +96,7 @@ function useRequest(arg: Params): {
     refresh: () => void
 }
 function useRequest(arg: Params) {
-    const [resData, setResData] = useState<ResData>({list: [], err: null})
+    const [resData, setResData] = useState<ResData>({list: [], err: null, code: 200})
     const [empty, setEmpty] = useState(false)
     const [loading, setLoading] = useState(true)
     const [refreshControl, setControl] = useState(false)
