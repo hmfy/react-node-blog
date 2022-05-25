@@ -5,7 +5,7 @@ import { JSEncrypt } from "jsencrypt"
 import publicKey from "src/config"
 
 // 根据运行环境返回合适的接口
-export const baseUrl = process.env.NODE_ENV === 'production' ? 'https://fyang.fun:3000' : 'https://192.168.31.68:3001'
+export const baseUrl = process.env.NODE_ENV === 'production' ? 'https://fyang.fun:3000' : 'https://192.168.31.68:3000'
 
 // 根据运行环境返回合适的axios实例
 export const getInstance = () => {

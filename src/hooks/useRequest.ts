@@ -31,7 +31,7 @@ export default useRequest
 
 const defaultAPI = '/execute2'
 
-export function request<S = []>(a: Params): Promise<ParseData<S>>
+export function request<S = []>(params: Params): Promise<ParseData<S>>
 export async function request({url = defaultAPI, ...resetParams}: Params): Promise<ParseData> {
     return new Promise(async (resolve, reject) => {
         getInstance().request({
