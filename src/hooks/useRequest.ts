@@ -13,6 +13,7 @@ export type ResData<T = []> = {
     total?: number
     token?: string
     expiresTime?: number
+    name?: string
 }
 
 export type ParseData<S = []> = {

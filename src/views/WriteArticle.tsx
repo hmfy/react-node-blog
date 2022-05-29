@@ -100,7 +100,8 @@ const replaceSrc = async (wrapperDom: HTMLElement) => {
     const fileList: File[] = []
     const domList: any = []
     Array.from(waitUploadImgList).forEach((ele: any) => {
-        if (!ele.src.includes('http://') || !ele.src.includes('https://')) {
+        const reg = new RegExp('http[s]?:\/\/')
+        if (!reg.test(ele.src)) {
             // 上传
             const file = dataURLtoFile(ele.src, 'pic.jpg')
             fileList.push(file)

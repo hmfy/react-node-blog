@@ -39,8 +39,8 @@ html,
 body,
 .ant-layout-header {
     background-image: url(https://fyang.fun/files/desktopbg.png);
-    background-repeat: no-repeat;
-    background-size: cover;
+    /*background-repeat: no-repeat;*/
+    /*background-size: cover;*/
     background-color: var(--bg-theme);
     background-attachment:fixed;
     font-weight: bold;

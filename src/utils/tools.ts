@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {Property} from "csstype"
-import { JSEncrypt } from "jsencrypt"
+import {JSEncrypt} from "jsencrypt"
 // @ts-ignore
 import publicKey from "src/config"
 
@@ -13,7 +13,10 @@ export const getInstance = () => {
     return axios.create({
         baseURL: baseUrl,
         method: 'POST',
-        headers: {'Authorization': 'Bearer ' + token},
+        headers: {
+            Authorization: 'Bearer',
+            access_token: token
+        }
     })
 }
 
@@ -82,6 +85,12 @@ export function setAddress (articleID: number|null = null) {
 // 获取用户城市
 export function getAddress () {
     return localStorage.getItem('user_address')
+}
+
+// 获取当前用户信息
+export function getUserInfo () {
+    const data = localStorage.getItem('userInfo') || "{}"
+    return JSON.parse(data)
 }
 
 // 获取当前用户登录状态

@@ -7,7 +7,7 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import Image from '@tiptap/extension-image'
 import TextAlign from '@tiptap/extension-text-align'
 import lowlight from 'lowlight'
-import React, {Dispatch, SetStateAction, useEffect} from "react";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import "assets/tiptap.scss"
 import CodeBlockComponent from "comps/CodeBlockComponent";
 import {file2Base} from "tools/tools";
@@ -164,6 +164,12 @@ const FyImage = Image.extend({
         ]
     }
 })
+
+function replace2Code (content:string) {
+    const result = content.replace(/\r\n/g, '<br/>')
+    const result2 = result.replace(/\n/g, '<br/>')
+    return result2.replace(/\s/g, '&nbsp;')
+}
 
 function Tiptap({initialValue = '', setEditor = () => undefined, editable = true}: Props) {
     const editor = useEditor({

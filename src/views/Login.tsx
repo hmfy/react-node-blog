@@ -4,24 +4,26 @@ import React, {CSSProperties} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
 import {request} from "hooks/useRequest";
 import { setEncrypt } from "tools/tools"
-import axios from "axios";
 
 function Login() {
     const navigate = useNavigate()
     const { search } = useLocation()
 
     const onFinish = async ({ username, password }: any) => {
-        const { data: { token, expiresTime } } = await request({
+        const { data: { token, expiresTime, name } } = await request({
             url: '/user/login',
             data: {
                 username: setEncrypt(username),
                 password: setEncrypt(password),
             }
         })
-        if (token && expiresTime) {
+        if (token && expiresTime && name) {
             localStorage.setItem('token', token)
             localStorage.setItem('expiresTime', String(Date.now() + expiresTime * 1000))
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+            localStorage.setItem('userInfo', JSON.stringify({
+                name: name
+            }))
+            // axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
             await message.success('登陆成功！')
             navigate(search.split('?')[1] || '/')
         }

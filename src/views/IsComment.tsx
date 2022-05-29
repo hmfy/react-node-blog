@@ -5,7 +5,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import FLoading from "comps/FLoading";
 import IsBackTop from "comps/IsBackTop";
 import useRequest, {request} from "hooks/useRequest";
-import {getAddress} from "tools/tools";
+import {getAddress, getUserInfo} from "tools/tools";
 import FEmpty from "comps/FEmpty";
 const {TextArea} = Input
 moment.extend(relativeTime)
@@ -20,6 +20,7 @@ type ListItem = {
     id: number
     author: string
     content: string
+    address: string
     createTime: number
 }
 
@@ -41,12 +42,12 @@ const Box = ({ data }:{data?: string}) => <span>{ data }</span>
 
 // 留言
 const Item = ({itemData}: { itemData: ListItem }) => {
-    const { author, content, createTime } = itemData
+    const { author, content, createTime, address } = itemData
     return (
         <Comment
             author={
                 <div style={{ color: "var(--tips)" }} >
-                    {(author || '') + '网友'}
+                    {(author || address + '网友')}
                 </div>
             }
             content={<Box data={content} />}
@@ -115,9 +116,10 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
         })
 
         commentRefresh({
-            author: getAddress() || '',
+            author: getUserInfo()['name'] || '',
             content: commentVal,
             id: list[0].ID,
+            address: getAddress() || '',
             createTime: Date.now(),
         })
         setBtnLoading(false)

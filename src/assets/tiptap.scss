@@ -52,11 +52,23 @@
         color: #abb2bf;
         padding: 0.75em 1em;
         border-radius: 5px;
+        white-space: pre !important;
         code {
+            white-space: pre !important;
             color: inherit;
             padding: 0;
             background: none;
             border-radius: 0;
+        }
+        &::-webkit-scrollbar {
+            display: inline-block;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: #bfbfbf;
+            border-radius: 16px;
+            border: 3.5px solid transparent;
+            background-clip: content-box;
+            visibility: visible;
         }
     }
 
