@@ -11,6 +11,7 @@ import WriteArticle from "views/WriteArticle";
 import IsComment from "views/IsComment";
 import ArticleDetail from "views/ArticleDetail";
 import Login from "views/Login";
+import Personal from "views/Personal";
 
 const {Header, Content} = Layout;
 
@@ -56,6 +57,9 @@ function AppLayout() {
                     }/>
                     <Route path="/detail" element={
                         <ArticleDetail/>
+                    }/>
+                    <Route path="/personal" element={
+                        <Personal/>
                     }/>
                 </Routes>
             </Content>

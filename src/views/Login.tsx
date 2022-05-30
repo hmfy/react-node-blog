@@ -1,30 +1,39 @@
 import {Form, Input, Button, message} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
-import React, {CSSProperties} from 'react';
+import React, {CSSProperties, useEffect} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
 import {request} from "hooks/useRequest";
-import { setEncrypt } from "tools/tools"
+import { setEncrypt, getLogin } from "tools/tools"
 
 function Login() {
     const navigate = useNavigate()
     const { search } = useLocation()
 
+    useEffect(() => {
+        if (getLogin()) {
+            message.success('已是登录状态，请勿重复登录！', 1).then(res => {
+                navigate('/', { replace: false })
+            })
+        }
+    }, [])
+
     const onFinish = async ({ username, password }: any) => {
-        const { data: { token, expiresTime, name } } = await request({
+        const { data: { tokenInfo, userInfo } } = await request({
             url: '/user/login',
             data: {
                 username: setEncrypt(username),
                 password: setEncrypt(password),
             }
         })
-        if (token && expiresTime && name) {
-            localStorage.setItem('token', token)
-            localStorage.setItem('expiresTime', String(Date.now() + expiresTime * 1000))
+        if (tokenInfo && userInfo) {
+            localStorage.setItem('token', tokenInfo.token)
+            localStorage.setItem('expiresTime', String(Date.now() + tokenInfo.expiresTime * 1000))
             localStorage.setItem('userInfo', JSON.stringify({
-                name: name
+                name: userInfo.name,
+                ID: userInfo.ID
             }))
             // axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-            await message.success('登陆成功！')
+            await message.success('登陆成功！', 1)
             navigate(search.split('?')[1] || '/')
         }
     };

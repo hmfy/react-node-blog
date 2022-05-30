@@ -11,9 +11,14 @@ export type ResData<T = []> = {
     pageSiz?: number
     pageNo?: number
     total?: number
-    token?: string
-    expiresTime?: number
-    name?: string
+    tokenInfo?: {
+        token: string
+        expiresTime: number
+    }
+    userInfo?: {
+        name: string
+        ID: number
+    }
 }
 
 export type ParseData<S = []> = {

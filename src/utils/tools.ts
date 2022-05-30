@@ -3,9 +3,10 @@ import {Property} from "csstype"
 import {JSEncrypt} from "jsencrypt"
 // @ts-ignore
 import publicKey from "src/config"
+import {useState} from "react";
 
 // 根据运行环境返回合适的接口
-export const baseUrl = process.env.NODE_ENV === 'production' ? 'https://fyang.fun:3000' : 'https://192.168.31.68:3000'
+export const baseUrl = process.env.NODE_ENV === 'production' ? 'https://fyang.fun:3000' : 'https://127.0.0.1:3000'
 
 // 根据运行环境返回合适的axios实例
 export const getInstance = () => {
@@ -88,7 +89,7 @@ export function getAddress () {
 }
 
 // 获取当前用户信息
-export function getUserInfo () {
+export function getUserInfo ():{ name?: string, ID?: number } {
     const data = localStorage.getItem('userInfo') || "{}"
     return JSON.parse(data)
 }

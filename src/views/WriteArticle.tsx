@@ -1,5 +1,5 @@
 import React, {CSSProperties, SetStateAction, useEffect, useState} from "react";
-import {Button, Col, Dropdown, Input, Menu, MenuProps, message, Modal, Radio, Row, Select} from "antd";
+import {Button, Col, Dropdown, Input, Menu, MenuProps, message, Modal, Radio, Row, Select, Switch} from "antd";
 import Tiptap from "comps/Tiptap";
 import DatePicker from "comps/DatePicker";
 import useRequest, {request} from "hooks/useRequest";
@@ -11,11 +11,11 @@ import FLoading from "comps/FLoading";
 import {dataURLtoFile, uploadFile} from "tools/tools";
 
 type TagList = Array<{ tag: string }>
-function ChooseTips({setTags, list}: { setTags: SetStateAction<any>, list: TagList }) {
+function ChooseTips({setTags, list, style}: { setTags: SetStateAction<any>, list: TagList, style:CSSProperties }) {
     const options = list.map(({tag}) => ({label: tag, value: tag}))
     const handleChange = (value: []) => setTags(value)
     return (<Select mode="tags" maxTagCount={1} maxTagTextLength={7}
-                    style={{width: 120, marginLeft: 20, textAlign: "left"}}
+                    style={{width: 220, marginLeft: 20, textAlign: "left", ...style}}
                     options={options}
                     placeholder="选择一个标签" onChange={handleChange}>
     </Select>)
@@ -169,6 +169,7 @@ function WriteArticle() {
     const [articleType, setArticleType] = useState(1)
     const [title, setTitle] = useState('')
     const [time, setTime] = useState(Date.now())
+    const [open, setOpen] = useState(0)
     const changeTime = (date: any, dateString: any) => setTime(new Date(dateString).getTime())
     const headerStyle: CSSProperties = {
         position: "sticky",
@@ -210,6 +211,7 @@ function WriteArticle() {
                 address: null,
                 tags: tags.join(','),
                 type: articleType,
+                open: open,
                 articleID: articleID
             }
         })
@@ -258,14 +260,16 @@ function WriteArticle() {
                 },
             })
         }
-        if (!title && (articleType === 1)) {
+
+        // 标题允许为空
+        /*if (!title && (articleType === 1)) {
             return message.info({
                 content: '标题为空！',
                 style: {
                     marginTop: '20vh',
                 },
             })
-        }
+        }*/
 
         // 弹窗
         setIsModalVisible(true)
@@ -273,6 +277,8 @@ function WriteArticle() {
         // 保存内容
         setParseDom(wrapper)
     }
+
+    const spaceStyle:CSSProperties = {marginLeft: 20, marginBottom: 20}
 
     return (
         <Row style={{
@@ -304,14 +310,24 @@ function WriteArticle() {
                 <Tiptap setEditor={setEditor}/>
                 <Modal title="确定发布吗？" okText='发布' cancelText='先不了' visible={isModalVisible} onOk={handleOk}
                        onCancel={handleCancel}>
-                    <div style={{textAlign: "left", marginTop: 10, borderTop: "1px solid #F5F5F5", paddingTop: 10}}>
-                        <Radio.Group value={articleType} onChange={e => setArticleType(e.target.value)}>
+                    <div>
+                        类型
+                        <Radio.Group value={articleType} onChange={e => setArticleType(e.target.value)} style={spaceStyle}>
                             <Radio.Button value={1}>文章</Radio.Button>
                             <Radio.Button value={2}>日志</Radio.Button>
                         </Radio.Group>
-                        <DatePicker onChange={changeTime} value={moment(time)}
-                                    style={{marginLeft: 20, marginBottom: 20}}/>
-                        <ChooseTips setTags={setTags} list={tagList}/>
+                    </div>
+                    <div>
+                        时间
+                        <DatePicker onChange={changeTime} value={moment(time)} style={spaceStyle}/>
+                    </div>
+                    <div>
+                        分类
+                        <ChooseTips setTags={setTags} list={tagList} style={ spaceStyle } />
+                    </div>
+                    <div>
+                        公开
+                        <Switch onChange={(value) => setOpen(Number(value))} style={{ marginLeft: 20 }} />
                     </div>
                 </Modal>
             </Col>
