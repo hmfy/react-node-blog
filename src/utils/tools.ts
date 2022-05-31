@@ -10,7 +10,7 @@ export const baseUrl = process.env.NODE_ENV === 'production' ? 'https://fyang.fu
 
 // 根据运行环境返回合适的axios实例
 export const getInstance = () => {
-    const token = localStorage.getItem('token') || ''
+    const { token } = JSON.parse(localStorage.getItem('userInfo') || "{}")
     return axios.create({
         baseURL: baseUrl,
         method: 'POST',
@@ -89,16 +89,9 @@ export function getAddress () {
 }
 
 // 获取当前用户信息
-export function getUserInfo ():{ name?: string, ID?: number } {
+export function getUserInfo () {
     const data = localStorage.getItem('userInfo') || "{}"
     return JSON.parse(data)
-}
-
-// 获取当前用户登录状态
-export function getLogin () {
-    const expiresTime = Number(localStorage.getItem('expiresTime') || 0)
-    if (!localStorage.getItem('token')) return false
-    return Date.now() < expiresTime
 }
 
 export function uploadFile (fileList:Array<File>):Promise<{data: {list:[]}}> {

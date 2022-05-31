@@ -1,44 +1,25 @@
 import React from "react";
-import {Navigate, useLocation, useNavigate} from "react-router-dom";
-import {Button, message, Modal} from "antd";
+import {useNavigate} from "react-router-dom";
+import {Col,Row} from "antd";
+import {useSelector} from "react-redux";
+import { RootState } from "../store"
 
-function IsLogin() {
-    const {state} = useLocation()
-
-    if (state) {
-        const { ID, name } = state as { ID: number, name: string }
-        return <Personal userID={ID} name={name} />
-    } else {
-        return <Navigate to='/'/>
-    }
-}
-
-function Personal ({ userID, name }:{ userID: number, name:string }) {
+function Personal () {
     const navigate = useNavigate()
-    const quit = () => {
-        Modal.warning({
-            keyboard: false,
-            okText: "确定",
-            closable: true,
-            centered: true,
-            content: '确认退出登录吗？',
-            onOk () {
-                localStorage.clear()
-                message.success('已退出登录', 1).then(res => {
-                    navigate('/', { replace: false })
-                })
-            },
-            onCancel () {}
-        })
+    const { ID, name } = useSelector((state:RootState) => state.userInfo.value)
+
+    if (!ID) {
+        navigate('/')
+        return null
     }
 
-    return (<div>
-        <p>用户 { userID }</p>
-        <p>{ name }的个人主页</p>
-        <Button type='primary' onClick={() => quit()}>
-            退出登录
-        </Button>
-    </div>)
+    return (<Row style={{ marginTop: 15 }}>
+        <Col xs={{span: 0}} lg={{span: 3}} xxl={{span: 6}}/>
+        <Col xs={{span: 24}} lg={{span: 18}} xxl={{span: 12}}>
+            { name } 的个人中心
+        </Col>
+        <Col xs={{span: 0}} lg={{span: 3}} xxl={{span: 6}}/>
+    </Row>)
 }
 
-export default IsLogin
+export default Personal

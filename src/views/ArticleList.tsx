@@ -5,8 +5,10 @@ import FEmpty from "comps/FEmpty";
 import {Col, Pagination, Row} from "antd";
 import { EditOutlined } from '@ant-design/icons';
 import {useNavigate} from "react-router-dom";
-import {getLogin, parseHTML} from "tools/tools";
+import {parseHTML} from "tools/tools";
+import { RootState } from "../store"
 import moment from "dayjs";
+import {useSelector} from "react-redux";
 
 type ListItem = { content: string, id: number, createTime: number }
 
@@ -40,6 +42,9 @@ const ArticleItem = ({content, id, createTime }: ListItem ) => {
         navigate('/write', { state: { articleID: id }, replace: false })
     }
     const readArticle = () => navigate('/detail', { state: { articleID: id }, replace: false })
+
+    const loginState = useSelector((state: RootState) => state.isLogin.value)
+
     return (<div className='hover-blue fxs-height-30'
                  style={wrapperStyle}>
         <div style={contentStyle} onClick={() => readArticle()}>
@@ -47,7 +52,7 @@ const ArticleItem = ({content, id, createTime }: ListItem ) => {
         </div>
         <div style={toolbarStyle}>
             { moment(createTime).fromNow() }
-            { getLogin() ? <EditOutlined style={{marginLeft: 20}} onClick={ editArticle } /> : null }
+            { loginState ? <EditOutlined style={{marginLeft: 20}} onClick={ editArticle } /> : null }
         </div>
     </div>)
 }

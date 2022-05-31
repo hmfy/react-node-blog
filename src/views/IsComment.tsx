@@ -5,8 +5,10 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import FLoading from "comps/FLoading";
 import IsBackTop from "comps/IsBackTop";
 import useRequest, {request} from "hooks/useRequest";
-import {getAddress, getUserInfo} from "tools/tools";
+import {getAddress} from "tools/tools";
 import FEmpty from "comps/FEmpty";
+import {useSelector} from "react-redux";
+import {RootState} from "../store";
 const {TextArea} = Input
 moment.extend(relativeTime)
 
@@ -102,6 +104,7 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
     const [btnLoading, setBtnLoading] = useState(false)
     const [commentVal, setCommentVal] = useState('')
     const handleChange = (e: Event) => setCommentVal(e.target.value)
+    const userState = useSelector((state: RootState) => state.userInfo.value)
     const handleSubmit = async () => {
         if (!commentVal) return
         setBtnLoading(true)
@@ -116,7 +119,7 @@ const Editor = ({commentRefresh, commentLength}: { commentRefresh: AddComment, c
         })
 
         commentRefresh({
-            author: getUserInfo()['name'] || '',
+            author: userState.name,
             content: commentVal,
             id: list[0].ID,
             address: getAddress() || '',

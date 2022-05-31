@@ -3,14 +3,20 @@ import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import React, {CSSProperties, useEffect} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
 import {request} from "hooks/useRequest";
-import { setEncrypt, getLogin } from "tools/tools"
+import { setEncrypt } from "tools/tools"
+import { RootState } from "../store"
+import {useDispatch, useSelector} from "react-redux";
+import { login } from "../store/reducer/loginSlice";
+import { setInfo } from "../store/reducer/userSlice";
 
 function Login() {
     const navigate = useNavigate()
     const { search } = useLocation()
+    const loginState = useSelector((state:RootState) => state.isLogin.value)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        if (getLogin()) {
+        if (loginState) {
             message.success('已是登录状态，请勿重复登录！', 1).then(res => {
                 navigate('/', { replace: false })
             })
@@ -18,23 +24,27 @@ function Login() {
     }, [])
 
     const onFinish = async ({ username, password }: any) => {
-        const { data: { tokenInfo, userInfo } } = await request({
+        const { data: { userInfo } } = await request({
             url: '/user/login',
             data: {
                 username: setEncrypt(username),
                 password: setEncrypt(password),
             }
         })
-        if (tokenInfo && userInfo) {
-            localStorage.setItem('token', tokenInfo.token)
-            localStorage.setItem('expiresTime', String(Date.now() + tokenInfo.expiresTime * 1000))
+        if (userInfo) {
+            const { expires } = userInfo
+            const expiresTime = Date.now() + expires  * 1000
             localStorage.setItem('userInfo', JSON.stringify({
-                name: userInfo.name,
-                ID: userInfo.ID
+                ...userInfo,
+                expires: expiresTime
             }))
-            // axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+            dispatch(setInfo({
+                ...userInfo,
+                expires: expiresTime
+            }))
             await message.success('登陆成功！', 1)
             navigate(search.split('?')[1] || '/')
+            dispatch(login())
         }
     };
 
