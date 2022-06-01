@@ -39,7 +39,7 @@ function MoreMenu({ articleID }:{ articleID: number|null }) {
                 articleID: id
             }
         })
-        await message.success('删除成功！即将返回主页')
+        await message.success('删除成功！即将返回主页', 1)
         navigate('/')
     }
     const [menuList, setMenuList] = useState([

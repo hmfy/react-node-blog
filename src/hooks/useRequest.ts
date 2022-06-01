@@ -61,7 +61,7 @@ export async function request({url = defaultAPI, ...resetParams}: Params): Promi
                         okText: "去登陆",
                         closable: true,
                         centered: true,
-                        content: '当前功能需要登陆才能继续使用',
+                        content: '登录状态已过期，请重新登录~',
                         onOk () {
                             window.location.href =  origin + '/login?' + curPath
                         },
